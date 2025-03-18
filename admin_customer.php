@@ -101,7 +101,16 @@ function deleteCustomer($customerId) {
     try {
         $stmt = $conn->prepare("DELETE FROM customers WHERE customer_id = :id");
         $stmt->bindParam(':id', $customerId, PDO::PARAM_INT);
-        return $stmt->execute();
+        $result = $stmt->execute();
+        if ($result) {
+            // Đặt lại auto_increment
+            $stmt = $conn->prepare("ALTER TABLE customers AUTO_INCREMENT = 1");
+            $stmt->execute();
+            
+            return ["success" => true, "message" => "Đã xóa khách hànghàng thành công"];
+        } else {
+            return ["success" => false, "message" => "Không thể xóa khách hàng"];
+        }
     } catch(PDOException $e) {
         error_log("Lỗi khi xóa khách hàng: " . $e->getMessage());
         return false;

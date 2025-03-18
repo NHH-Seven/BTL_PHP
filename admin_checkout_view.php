@@ -98,15 +98,15 @@ if (isset($_GET['view_detail']) && !empty($_GET['view_detail'])) {
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
                                 <li class="current-list-item"><a href="admin_checkout_view.php">Đơn Hàng</a></li>
-                                <li><a href="admin_faqq.php">Câu Hỏi</a></li>
+                                <li><a href="admin_faqq_view.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
-                                <li><a href="admin_thongke.php">Thống Kê</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
+                                <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
@@ -129,7 +129,7 @@ if (isset($_GET['view_detail']) && !empty($_GET['view_detail'])) {
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
+                        <p>Trang Quản Lý</p>
                         <h1>Quản lý đơn hàng</h1>
                     </div>
                 </div>
@@ -283,66 +283,50 @@ if (isset($_GET['view_detail']) && !empty($_GET['view_detail'])) {
                                                         <small>Đơn giá: <?php echo number_format($item['price'], 0); ?> VND</small>
                                                     </div>
                                                     <div class="text-end">
-                                        <span class="badge bg-secondary"><?php echo $item['quantity']; ?> x</span>
-                                        <div><?php echo number_format($item['price'] * $item['quantity'], 0); ?> VND</div>
+                                                        <span class="badge bg-secondary"><?php echo $item['quantity']; ?> x</span>
+                                                        <div><?php echo number_format($item['price'] * $item['quantity'], 0); ?> VND</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    
-                    <div class="mt-3 text-end">
-                        <strong>Tổng số lượng:</strong> 
-                        <?php
-                            $total_quantity = 0;
-                            foreach ($order_detail['items'] as $item) {
-                                $total_quantity += $item['quantity'];
-                            }
-                            echo $total_quantity;
-                        ?>
-                    </div>
-                <?php endif; ?>
-                
-                <div class="mt-4">
-                    <a href="admin_checkout_view.php" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Quay lại
-                    </a>
-                    
-                    <?php if ($order_detail['status'] != 'completed' && $order_detail['status'] != 'cancelled'): ?>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#completeModal">
-                            <i class="fas fa-check"></i> Hoàn thành đơn hàng
-                        </button>
-                    <?php endif; ?>
-                    
-                    <!-- Modal xác nhận hoàn thành -->
-                    <div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Xác nhận hoàn thành</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Bạn có chắc chắn muốn đánh dấu đơn hàng #<?php echo $order_detail['order_id']; ?> là hoàn thành?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    <form action="admin_checkout.php" method="POST">
-                                        <input type="hidden" name="action" value="complete">
-                                        <input type="hidden" name="order_id" value="<?php echo $order_detail['order_id']; ?>">
-                                        <button type="submit" class="btn btn-success">Xác nhận</button>
-                                    </form>
+                                    
+                                    <div class="mt-3 text-end">
+                                        <strong>Tổng số lượng:</strong> 
+                                        <?php
+                                            $total_quantity = 0;
+                                            foreach ($order_detail['items'] as $item) {
+                                                $total_quantity += $item['quantity'];
+                                            }
+                                            echo $total_quantity;
+                                        ?>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <div class="mt-4">
+                                    <a href="admin_checkout_view.php" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Quay lại
+                                    </a>
+                                    
+                                    <?php if ($order_detail['status'] != 'completed' && $order_detail['status'] != 'cancelled'): ?>
+                                        <!-- Thay thế nút kích hoạt modal bằng form trực tiếp -->
+                                        <form action="admin_checkout.php" method="POST" style="display:inline;">
+                                            <input type="hidden" name="action" value="completed">
+                                            <input type="hidden" name="order_id" value="<?php echo $order_detail['order_id']; ?>">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-check"></i> Hoàn thành đơn hàng
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-<?php endif; ?>
-        </div>
-    </div>
+    
 
     <!-- end logo carousel -->
 
@@ -364,4 +348,5 @@ if (isset($_GET['view_detail']) && !empty($_GET['view_detail'])) {
         }, 5000);
     </script>
 </body>
+
 </html>

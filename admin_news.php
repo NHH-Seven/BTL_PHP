@@ -63,6 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Clear form fields
                     $title = $excerpt = $content = $author = '';
                     $image = 'news-bg-1.jpg';
+                    
+                    // Chuyển hướng để làm mới trang
+                    header('Location: admin_news.php?success=' . urlencode($success));
+                    exit;
                 } else {
                     $error = "Error: " . implode(", ", $stmt->errorInfo());
                 }
@@ -133,6 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 if ($stmt->execute()) {
                     $success = "Article updated successfully";
+                    // Chuyển hướng về trang chính
+                    header('Location: admin_news.php?success=' . urlencode($success));
+                    exit;
+                
                 } else {
                     $error = "Error: " . implode(", ", $stmt->errorInfo());
                 }
@@ -140,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Delete news article
     // Delete news article
     if (isset($_POST['delete_news'])) {
         $news_id = (int)$_POST['news_id'];
@@ -163,6 +172,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($stmt->execute()) {
             $success = "Article deleted successfully";
+            
+            // Reset AUTO_INCREMENT để tránh trùng ID cũ
+            $max_id_query = "SELECT MAX(id) as max_id FROM news";
+            $max_id_result = $conn->query($max_id_query);
+            $max_id_row = $max_id_result->fetch();
+            $next_id = ($max_id_row['max_id'] ?? 0) + 1;
+            
+            // Đặt AUTO_INCREMENT cho bảng news
+            $reset_query = "ALTER TABLE news AUTO_INCREMENT = $next_id";
+            $conn->query($reset_query);
+            
+            // Chuyển hướng để làm mới trang
+            header('Location: admin_news.php?success=' . urlencode($success));
+            exit;
         } else {
             $error = "Error: " . implode(", ", $stmt->errorInfo());
         }
@@ -202,7 +225,7 @@ $total_row = $total_result->fetch();
 $total_pages = ceil($total_row['total'] / $results_per_page);
 
 // Get news data with pagination using PDO
-$sql = "SELECT id, title, excerpt, image, author, published_date, created_at FROM news ORDER BY published_date DESC LIMIT :offset, :limit";
+$sql = "SELECT id, title, excerpt, image, author, published_date, created_at FROM news ORDER BY id ASC LIMIT :offset, :limit";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 $stmt->bindParam(':limit', $results_per_page, PDO::PARAM_INT);

@@ -94,18 +94,18 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li class="current-list-item"><a href="admin_customer_view.php">Khách Hàng</a></li>
-                                <li><a href="admin_checkout.php">Đơn Hàng</a></li>
-                                <li><a href="admin_faqq.php">Câu Hỏi</a></li>
+                                <li><a href="admin_checkout_view.php">Đơn Hàng</a></li>
+                                <li><a href="admin_faqq_view.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
-                                <li><a href="admin_thongke.php">Thống Kê</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
+                                <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                                     </div>
                                 </li>
                             </ul>
@@ -125,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
+                        <p>Trang Quản Lý</p>
                         <h1>Quản Lý Khách Hàng</h1>
                     </div>
                 </div>
@@ -286,6 +286,25 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
         </div>
     </div>
     <!-- end admin section -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <p>Copyrights &copy; 2025 - <a href="https://fruitkha.com/">Fruitkha</a>, All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>

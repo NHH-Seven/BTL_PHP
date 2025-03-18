@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Include database connection
 require_once 'db_connect.php';
 
@@ -63,63 +67,67 @@ try {
 	
 	<!-- header -->
 	<div class="top-header-area" id="sticker">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-sm-12 text-center">
-					<div class="main-menu-wrap">
-						<!-- logo -->
-						<div class="site-logo">
-							<a href="index.php">
-								<img src="assets/img/logo.png" alt="">
-							</a>
-						</div>
-						<!-- logo -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 text-center">
+                <div class="main-menu-wrap">
+                    <!-- logo -->
+                    <div class="site-logo">
+                        <a href="index.php">
+                            <img src="assets/img/logo.png" alt="">
+                        </a>
+                    </div>
+                    <!-- logo -->
 
-						<!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li ><a href="index.php">Trang Chủ</a>
-								</li>
-								
-								<li><a href="news.php">Tin Tức</a>
-								</li>
-								<li><a href="contact.php">Phản Hồi</a></li>
-								<li class="current-list-item"><a href="shop.php">Cửa Hàng</a>
-									<ul class="sub-menu">
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="checkout.php">Thanh Toán</a></li>
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-									</ul>
-								</li>
-								<li><a href="#">Trang</a>
-									<ul class="sub-menu">
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-										<li><a href="checkout.php">Thanh Toán</a></li>
-										<li><a href="contact.php">Phản Hồi</a></li>
-										<li><a href="news.php">Tin Tức</a></li>
-										<li><a href="shop.php">Cửa Hàng</a></li>
-									</ul>
-								</li>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php">
-											<i class="fas fa-shopping-cart"></i>
-											<span id="cart-count">0</span> <!-- Đây là phần tử sẽ hiển thị số lượng -->
-										</a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-										<a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- menu start -->
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            </li>
+                            <li><a href="contact.php">Phản Hồi</a></li>
+                            </li>
+                            <li><a href="news.php">Tin Tức</a>
+                            </li>
+                            <li><a href="shop.php">Cửa Hàng</a>
+                                <ul class="sub-menu">
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Trang</a>
+                                <ul class="sub-menu">
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="contact.php">Phản Hồi</a></li>
+                                    <li><a href="news.php">Tin Tức</a></li>
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="faqq.php">Câu Hỏi</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="header-icons">
+                                    <a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+
+                                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                                        <a class="shopping-login" href="user_profile.php" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                                            <i class="fa-solid fa-user-check"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                    <div class="mobile-menu"></div>
+                    <!-- menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<!-- end header -->
 
 	<!-- search area -->
@@ -252,73 +260,7 @@ try {
 	<!-- end logo carousel -->
 
 	<!-- footer -->
-	<div class="footer-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box about-widget">
-						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box get-in-touch">
-						<h2 class="widget-title">Get in Touch</h2>
-						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box pages">
-						<h2 class="widget-title">Trang</h2>
-						<ul>
-							<li><a href="index.php">Trang Chủ</a></li>
-							<li><a href="shop.php">Cửa Hàng</a></li>
-							<li><a href="news.php">Tin Tức</a></li>
-							<li><a href="contact.php">Phản Hồi</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.php">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end footer -->
-	
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-				
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php include 'footer.php'; ?>
 	<!-- end copyright -->
 	
 	<!-- jquery -->

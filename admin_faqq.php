@@ -104,7 +104,17 @@ function deleteFaq($id) {
     try {
         $stmt = $conn->prepare("DELETE FROM faqs WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
+        $result = $stmt->execute();
+        
+        if ($result) {
+            // Đặt lại auto_increment
+            $stmt = $conn->prepare("ALTER TABLE faqs AUTO_INCREMENT = 1");
+            $stmt->execute();
+            
+            return ["success" => true, "message" => "Đã xóa câu hỏi thành công"];
+        } else {
+            return ["success" => false, "message" => "Không thể xóa câu hỏi"];
+        }
     } catch(PDOException $e) {
         error_log("Lỗi khi xóa FAQ ID $id: " . $e->getMessage());
         return false;

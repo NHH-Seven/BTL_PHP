@@ -16,7 +16,7 @@ function getAllOrders() {
                    o.total_amount, o.status, o.created_at
             FROM orders o
             LEFT JOIN customers c ON o.customer_id = c.customer_id
-            ORDER BY o.created_at ASC
+            ORDER BY o.created_at DESC
         ");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -141,7 +141,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = deleteOrder($order_id);
             $message = $result ? "Đã xóa đơn hàng thành công" : "Không thể xóa đơn hàng";
             break;
+            
+        case 'completed':
+            $result = updateOrderStatus($order_id, 'completed');
+            $message = $result ? "Đã hoàn thành đơn hàng thành công" : "Không thể hoàn thành đơn hàng";
+            break;
     }
+    
+    // Thêm debug log để xác định vấn đề
+    error_log("Action: $action, Order ID: $order_id, Result: " . ($result ? 'true' : 'false') . ", Message: $message");
     
     // Trả về kết quả dưới dạng JSON nếu là yêu cầu AJAX
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
@@ -151,7 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     // Nếu không phải AJAX, chuyển hướng lại trang quản lý đơn hàng
-    header("Location: admin_checkout_view.php?message=" . urlencode($message) . "&success=" . ($result ? '1' : '0'));
+    header("Location: admin_checkout_view.php?message=" . urlencode($message) . "&success=" . ($result ? '1' : '0') . 
+           (isset($_GET['view_detail']) ? "&view_detail=$order_id" : ""));
     exit;
 }
 ?>

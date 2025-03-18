@@ -85,15 +85,15 @@
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li class="current-list-item"><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
-                                <li><a href="admin_checkout.php">Đơn Hàng</a></li>
-                                <li><a href="admin_faqq.php">Câu Hỏi</a></li>
+                                <li><a href="admin_checkout_view.php">Đơn Hàng</a></li>
+                                <li><a href="admin_faqq_view.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
-                                <li><a href="admin_thongke.php">Thống Kê</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
+                                <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -116,8 +116,8 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
-                        <h1>Manage Products</h1>
+                        <p>Trang Quản Lý</p>
+                        <h1>Quản Lý Sản Phẩm</h1>
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h2><?php echo !empty($id) ? 'Edit Product' : 'Add New Product'; ?></h2>
+                    <h2><?php echo !empty($id) ? 'Sửa Sản Phẩm' : 'Thêm sản phẩm mới'; ?></h2>
                     <div class="admin-form">
                         <form action="admin_products.php" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="<?php echo !empty($id) ? 'edit' : 'add'; ?>">
@@ -147,42 +147,42 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="name">Product Name:</label>
+                                        <label for="name">Tên Sản Phẩm:</label>
                                         <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>" required>
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="price">Price:</label>
+                                        <label for="price">Giá:</label>
                                         <input type="number" class="form-control" id="price" name="price" value="<?php echo $price; ?>" step="0.01" required>
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="unit">Unit:</label>
+                                        <label for="unit">Đơn vị:</label>
                                         <input type="text" class="form-control" id="unit" name="unit" value="<?php echo $unit; ?>" required>
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="category">Category:</label>
+                                        <label for="category">Loại:</label>
                                         <input type="text" class="form-control" id="category" name="category" value="<?php echo $category; ?>" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="description">Description:</label>
+                                        <label for="description">Sự miêu tả:</label>
                                         <textarea class="form-control" id="description" name="description" rows="4"><?php echo $description; ?></textarea>
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="image">Product Image:</label>
+                                        <label for="image">Ảnh Sản Phẩm:</label>
                                         <?php if (!empty($image)): ?>
                                             <div class="mb-2">
                                                 <img src="<?php echo $image; ?>" alt="Current Image" class="product-img">
-                                                <p class="mt-1">Current image. Upload a new one to replace it.</p>
+                                                <p class="mt-1">Hình ảnh hiện tại. Tải lên một cái mới để thay thế nó.</p>
                                             </div>
                                         <?php endif; ?>
                                         <input type="file" class="form-control-file" id="image" name="image">
-                                        <small class="form-text text-muted">Leave empty to keep current image. Only JPG, JPEG, PNG & GIF files are allowed.</small>
+                                        <small class="form-text text-muted">Để trống để giữ hình ảnh hiện tại. Chỉ cho phép các tệp JPG, JPEG, PNG & GIF.</small>
                                     </div>
                                     
                                     <div class="form-group">
@@ -207,17 +207,17 @@
                     </div>
 
                     <div class="products-list">
-                        <h3>Existing Products</h3>
+                        <h3>Các Sản Phẩm Hiện Có</h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>ảnh</th>
+                                    <th>Tên</th>
+                                    <th>Giá</th>
+                                    <th>loại</th>
+                                    <th>Tình trạng</th>
+                                    <th>Thực Hiện</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,7 +229,7 @@
                                                 <?php if (!empty($product['image'])): ?>
                                                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="product-img">
                                                 <?php else: ?>
-                                                    <span class="text-muted">No image</span>
+                                                    <span class="text-muted">Không có hình ảnh</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td><?php echo $product['name']; ?></td>
@@ -242,17 +242,17 @@
                                             </td>
                                             <td class="action-buttons">
                                                 <a href="admin_products.php?edit=<?php echo $product['id']; ?>" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i> Sửa 
                                                 </a>
                                                 <form action="admin_products.php" method="post" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                                     <input type="hidden" name="action" value="delete">
                                                     <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
                                                     <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i> xóa
                                                     </button>
                                                 </form>
-                                                <a href="shop-single.php?id=<?php echo $product['id']; ?>" target="_blank" class="btn btn-sm btn-secondary">
-                                                    <i class="fas fa-eye"></i> View
+                                                <a href="shop.php?id=<?php echo $product['id']; ?>" target="_blank" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-eye"></i> xem
                                                 </a>
                                             </td>
                                         </tr>
@@ -299,6 +299,25 @@
         </div>
     </div>
     <!-- end admin section -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <p>Copyrights &copy; 2025 - <a href="https://fruitkha.com/">Fruitkha</a>, All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>

@@ -1,6 +1,11 @@
 <?php
-require_once 'config.php';
+require_once 'db_connect.php';
 session_start();
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if news ID is provided
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -13,16 +18,15 @@ $news_id = (int)$_GET['id'];
 // Get news article data
 $sql = "SELECT * FROM news WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $news_id);
+$stmt->bindParam(1, $news_id, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
 
-if ($result->num_rows == 0) {
+if ($stmt->rowCount() == 0) {
     header("Location: news.php");
     exit;
 }
 
-$news = $result->fetch_assoc();
+$news = $stmt->fetch();
 
 // Get comments
 $comments_sql = "SELECT c.*, parent.author_name as parent_author 
@@ -31,26 +35,28 @@ $comments_sql = "SELECT c.*, parent.author_name as parent_author
                 WHERE c.news_id = ? 
                 ORDER BY c.parent_id ASC, c.comment_date ASC";
 $comments_stmt = $conn->prepare($comments_sql);
-$comments_stmt->bind_param("i", $news_id);
+$comments_stmt->bindParam(1, $news_id, PDO::PARAM_INT);
 $comments_stmt->execute();
-$comments_result = $comments_stmt->get_result();
+$comments_result = $comments_stmt->fetchAll();
 
 // Get tags for this article
 $tags_sql = "SELECT t.name FROM tags t 
             JOIN news_tags nt ON t.id = nt.tag_id 
             WHERE nt.news_id = ?";
 $tags_stmt = $conn->prepare($tags_sql);
-$tags_stmt->bind_param("i", $news_id);
+$tags_stmt->bindParam(1, $news_id, PDO::PARAM_INT);
 $tags_stmt->execute();
-$tags_result = $tags_stmt->get_result();
+$tags_result = $tags_stmt->fetchAll();
 
 // Get recent posts
-$recent_posts_sql = "SELECT id, title FROM news ORDER BY published_date DESC LIMIT 5";
-$recent_posts_result = $conn->query($recent_posts_sql);
+$recent_posts_sql = "SELECT id, title FROM news ORDER BY published_date ASC LIMIT 5";
+$recent_posts_stmt = $conn->query($recent_posts_sql);
+$recent_posts_result = $recent_posts_stmt->fetchAll();
 
 // Get archive posts
-$archive_sql = "SELECT * FROM archive_posts ORDER BY id DESC";
-$archive_result = $conn->query($archive_sql);
+$archive_sql = "SELECT * FROM archive_posts ORDER BY id ASC";
+$archive_stmt = $conn->query($archive_sql);
+$archive_result = $archive_stmt->fetchAll();
 
 // Handle comment submission
 $comment_success = $comment_error = '';
@@ -71,7 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
             
             $insert_sql = "INSERT INTO comments (news_id, parent_id, author_name, author_image, content, comment_date) VALUES (?, ?, ?, ?, ?, NOW())";
             $insert_stmt = $conn->prepare($insert_sql);
-            $insert_stmt->bind_param("iisss", $news_id, $parent_id, $author_name, $author_image, $content);
+            
+            if ($parent_id === 0) {
+                $parent_id = null;
+            }
+            
+            $insert_stmt->bindParam(1, $news_id, PDO::PARAM_INT);
+            $insert_stmt->bindParam(2, $parent_id, PDO::PARAM_INT);
+            $insert_stmt->bindParam(3, $author_name, PDO::PARAM_STR);
+            $insert_stmt->bindParam(4, $author_image, PDO::PARAM_STR);
+            $insert_stmt->bindParam(5, $content, PDO::PARAM_STR);
             
             if ($insert_stmt->execute()) {
                 $comment_success = "Comment posted successfully!";
@@ -79,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
                 header("Location: single-news.php?id=$news_id&comment_added=1");
                 exit;
             } else {
-                $comment_error = "Error posting comment: " . $conn->error;
+                $comment_error = "Error posting comment";
             }
         }
     }
@@ -177,81 +192,71 @@ if (isset($_GET['comment_added'])) {
     <!--PreLoader Ends-->
 	
 	<!-- header -->
-	<div class="top-header-area" id="sticker">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-sm-12 text-center">
-					<div class="main-menu-wrap">
-						<!-- logo -->
-						<div class="site-logo">
-							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
-							</a>
-						</div>
-						<!-- logo -->
+    <div class="top-header-area" id="sticker">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 text-center">
+                <div class="main-menu-wrap">
+                    <!-- logo -->
+                    <div class="site-logo">
+                        <a href="index.php">
+                            <img src="assets/img/logo.png" alt="">
+                        </a>
+                    </div>
+                    <!-- logo -->
 
-						<!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li ><a href="index.php">Trang Chủ</a>
-								</li>
-								<li><a href="contact.php">Phản Hồi</a></li>
-								</li>
-								<li class="current-list-item"><a href="news.php">Tin Tức</a>
-								</li>
-								<li><a href="shop.php">Cửa Hàng</a>
-									<ul class="sub-menu">
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="checkout.php">Thanh Toán</a></li>
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-									</ul>
-								</li>
-								<li><a href="#">Trang</a>
-									<ul class="sub-menu">
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-										<li><a href="checkout.php">Thanh TOán</a></li>
-										<li><a href="contact.php">Phản Hồi</a></li>
-										<li><a href="news.php">Tin Tức</a></li>
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="faqq.php">Câu Hỏi</a></li>
-									</ul>
-								</li>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-										<a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- menu start -->
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            </li>
+                            <li><a href="contact.php">Phản Hồi</a></li>
+                            </li>
+                            <li><a href="news.php">Tin Tức</a>
+                            </li>
+                            <li><a href="shop.php">Cửa Hàng</a>
+                                <ul class="sub-menu">
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Trang</a>
+                                <ul class="sub-menu">
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="contact.php">Phản Hồi</a></li>
+                                    <li><a href="news.php">Tin Tức</a></li>
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="faqq.php">Câu Hỏi</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="header-icons">
+                                    <a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+
+                                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                                        <a class="shopping-login" href="user_profile.php" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                                            <i class="fa-solid fa-user-check"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                    <div class="mobile-menu"></div>
+                    <!-- menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<!-- end header -->
 
 	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<!-- end search arewa -->
     <!-- breadcrumb-section -->
     <div class="breadcrumb-section breadcrumb-bg">
@@ -293,7 +298,7 @@ if (isset($_GET['comment_added'])) {
                         </div>
 
                         <div class="comments-list-wrap">
-                            <h3 class="comment-count-title"><?php echo $comments_result->num_rows; ?> Comments</h3>
+                            <h3 class="comment-count-title"><?php echo count($comments_result); ?> Comments</h3>
                             
                             <?php if (!empty($comment_success)): ?>
                             <div class="alert alert-success"><?php echo $comment_success; ?></div>
@@ -309,7 +314,7 @@ if (isset($_GET['comment_added'])) {
                                 $comment_replies = [];
                                 
                                 // Sort comments into parent comments and replies
-                                while ($comment = $comments_result->fetch_assoc()) {
+                                foreach ($comments_result as $comment) {
                                     if ($comment['parent_id'] === null) {
                                         $comments[] = $comment;
                                     } else {
@@ -366,8 +371,6 @@ if (isset($_GET['comment_added'])) {
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <!-- Phần form bình luận cho người dùng đã đăng nhập -->
-                    
                         
                         <!-- Comment form -->
                         <div class="comment-form">
@@ -389,7 +392,7 @@ if (isset($_GET['comment_added'])) {
                             <h4>Recent Posts</h4>
                             <ul>
                                 <?php
-                                while ($recent_post = $recent_posts_result->fetch_assoc()) {
+                                foreach ($recent_posts_result as $recent_post) {
                                     echo '<li><a href="single-news.php?id=' . $recent_post['id'] . '">' . htmlspecialchars($recent_post['title']) . '</a></li>';
                                 }
                                 ?>
@@ -399,7 +402,7 @@ if (isset($_GET['comment_added'])) {
                             <h4>Archive Posts</h4>
                             <ul>
                                 <?php
-                                while ($archive = $archive_result->fetch_assoc()) {
+                                foreach ($archive_result as $archive) {
                                     echo '<li>' . htmlspecialchars($archive['month']) . ' (' . $archive['count'] . ')</li>';
                                 }
                                 ?>
@@ -410,7 +413,7 @@ if (isset($_GET['comment_added'])) {
                             <ul>
                                 <?php
                                 $tags = array();
-                                while ($tag = $tags_result->fetch_assoc()) {
+                                foreach ($tags_result as $tag) {
                                     $tags[] = $tag['name'];
                                 }
                                 
@@ -456,73 +459,7 @@ if (isset($_GET['comment_added'])) {
     <!-- end logo carousel -->
 
     <!-- footer -->
-    <div class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box about-widget">
-                        <h2 class="widget-title">About us</h2>
-                        <p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box get-in-touch">
-                        <h2 class="widget-title">Get in Touch</h2>
-                        <ul>
-                            <li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-                            <li>support@fruitkha.com</li>
-                            <li>+00 111 222 3333</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box pages">
-                        <h2 class="widget-title">Trang</h2>
-                        <ul>
-                            <li><a href="index.php">Trang Chủ</a></li>
-                            
-                            <li><a href="shop.php">Cửa Hàng</a></li>
-                            <li><a href="news.php">Tin Tức</a></li>
-                            <li><a href="contact.php">Phản Hồi</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box subscribe">
-                        <h2 class="widget-title">Subscribe</h2>
-                        <p>Subscribe to our mailing list to get the latest updates.</p>
-                        <form action="index.php">
-                            <input type="email" placeholder="Email">
-                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end footer -->
-    
-    <!-- copyright -->
-    <div class="copyright">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <p>Copyrights &copy; <?php echo date('Y'); ?> - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights Reserved.</p>
-                </div>
-                <div class="col-lg-6 text-right col-md-12">
-                    <div class="social-icons">
-                        <ul>
-                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include 'footer.php'; ?>
     <!-- end copyright -->
     
     <!-- jquery -->

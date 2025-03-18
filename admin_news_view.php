@@ -80,18 +80,18 @@
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li class="current-list-item"><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
-                                <li><a href="admin_checkout.php">Đơn Hàng</a></li>
-                                <li><a href="admin_faqq.php">Câu Hỏi</a></li>
+                                <li><a href="admin_checkout_view.php">Đơn Hàng</a></li>
+                                <li><a href="admin_faqq_view.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
-                                <li><a href="admin_thongke.php">Thống Kê</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
+                                <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                                     </div>
                                 </li>
                             </ul>
@@ -111,8 +111,8 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
-                        <h1>Manage News Articles</h1>
+                        <p>Trang Quản Lý</p>
+                        <h1>Quản Lý Bài Viết</h1>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h2><?php echo $news_id > 0 ? 'Edit News Article' : 'Add New News Article'; ?></h2>
+                    <h2><?php echo $news_id > 0 ? 'Chỉnh sửa tin tức' : 'Thêm bài viết tin tức mới'; ?></h2>
                     <div class="admin-form">
                         <form method="post" enctype="multipart/form-data">
                             <?php if ($news_id > 0): ?>
@@ -141,35 +141,35 @@
                             <?php endif; ?>
                             
                             <div class="form-group">
-                                <label for="title">Title:</label>
+                                <label for="title">Tiêu Đề:</label>
                                 <input type="text" id="title" name="title" class="form-control" value="<?php echo htmlspecialchars($title); ?>" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="excerpt">Excerpt:</label>
+                                <label for="excerpt">Trích:</label>
                                 <textarea id="excerpt" name="excerpt" class="form-control" rows="2" required><?php echo htmlspecialchars($excerpt); ?></textarea>
                             </div>
                             
                             <div class="form-group">
-                                <label for="content">Content:</label>
+                                <label for="content">nội dung:</label>
                                 <textarea id="content" name="content" class="form-control" rows="10" required><?php echo htmlspecialchars($content); ?></textarea>
                             </div>
                             
                             <div class="form-group">
-                                <label for="author">Author:</label>
+                                <label for="author">Tác giả:</label>
                                 <input type="text" id="author" name="author" class="form-control" value="<?php echo htmlspecialchars($author); ?>" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="image">Image:</label>
+                                <label for="image">Ảnh:</label>
                                 <?php if ($image != 'news-bg-1.jpg'): ?>
                                     <div class="mb-2">
                                         <img src="assets/img/latest-news/<?php echo htmlspecialchars($image); ?>" alt="Current image" style="max-width: 200px;">
-                                        <p class="mt-1">Current image: <?php echo htmlspecialchars($image); ?></p>
+                                        <p class="mt-1">Hình ảnh hiện tại: <?php echo htmlspecialchars($image); ?></p>
                                     </div>
                                 <?php endif; ?>
                                 <input type="file" id="image" name="image" class="form-control-file">
-                                <small class="form-text text-muted">Leave empty to keep current image. Only JPG, JPEG, PNG & GIF files are allowed.</small>
+                                <small class="form-text text-muted">Để trống để giữ hình ảnh hiện tại. Chỉ cho phép các tệp JPG, JPEG, PNG & GIF.</small>
                             </div>
 
                             <div class="form-group">
@@ -177,22 +177,22 @@
                                     <?php echo $news_id > 0 ? 'Update Article' : 'Add Article'; ?>
                                 </button>
                                 <?php if ($news_id > 0): ?>
-                                    <a href="admin_news.php" class="btn btn-secondary">Cancel</a>
+                                    <a href="admin_news.php" class="btn btn-secondary">Hủy</a>
                                 <?php endif; ?>
                             </div>
                         </form>
                     </div>
 
                     <div class="news-list">
-                        <h3>Existing News Articles</h3>
+                        <h3>Các bài Viết hiện có</h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Published Date</th>
-                                    <th>Actions</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Tác giả</th>
+                                    <th>Ngày xuất bản</th>
+                                    <th>Thực HIện</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -205,23 +205,23 @@
                                             <td><?php echo date('M d, Y', strtotime($row['published_date'])); ?></td>
                                             <td class="action-buttons">
                                                 <a href="admin_news.php?edit=<?php echo $row['id']; ?>" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i> Sửa
                                                 </a>
                                                 <form method="post" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this article?');">
                                                     <input type="hidden" name="news_id" value="<?php echo $row['id']; ?>">
                                                     <button type="submit" name="delete_news" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i> Xóa
                                                     </button>
                                                 </form>
-                                                <a href="news-single.php?id=<?php echo $row['id']; ?>" target="_blank" class="btn btn-sm btn-secondary">
-                                                    <i class="fas fa-eye"></i> View
+                                                <a href="single-news.php?id=<?php echo $row['id']; ?>" target="_blank" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-eye"></i> Xem
                                                 </a>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="5" class="text-center">No news articles found</td>
+                                        <td colspan="5" class="text-center">Không tìm thấy bài viết</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -255,6 +255,25 @@
                                 </ul>
                             </div>
                         <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <p>Copyrights &copy; 2025 - <a href="https://fruitkha.com/">Fruitkha</a>, All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

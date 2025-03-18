@@ -1,4 +1,3 @@
-
 <?php
 // Include the statistics logic file
 require_once 'admin_static.php';
@@ -39,24 +38,28 @@ function formatCurrency($amount) {
     <link rel="stylesheet" href="assets/css/main.css">
     <!-- responsive -->
     <link rel="stylesheet" href="assets/css/responsive.css">
-    <!-- Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.7.1/chart.min.js"></script>
+    
     <style>
         .dashboard-card {
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            margin-bottom: 20px;
+            border-radius: 8px; /* Bo góc nhiều hơn */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Đổ bóng rõ hơn */
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px; /* Tăng khoảng cách giữa các hàng */
+            height: 200px; /* Chiều cao cố định */
         }
+        
         .dashboard-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
         }
+        
         .card-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
+        
         .card-stat {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: bold;
         }
         .bg-gradient-primary {
@@ -98,6 +101,35 @@ function formatCurrency($amount) {
         .table th {
             background-color: #f8f8f8;
         }
+        .revenue-progress {
+            height: 25px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+        }
+        .revenue-month {
+            margin-bottom: 20px;
+        }
+        .month-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .month-value {
+            text-align: right;
+            font-weight: bold;
+        }
+        .progress-primary {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        .revenue-month:hover .progress-bar {
+            opacity: 0.8;
+        }
+        .month-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -118,18 +150,18 @@ function formatCurrency($amount) {
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
-                                <li><a href="admin_checkout.php">Đơn Hàng</a></li>
-                                <li><a href="admin_faqq.php">Câu Hỏi</a></li>
+                                <li><a href="admin_checkout_view.php">Đơn Hàng</a></li>
+                                <li><a href="admin_faqq_view.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
                                 <li class="current-list-item"><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                                     </div>
                                 </li>
                             </ul>
@@ -149,7 +181,7 @@ function formatCurrency($amount) {
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
+                        <p>Trang Quản Lý</p>
                         <h1>Thống Kê</h1>
                     </div>
                 </div>
@@ -166,59 +198,108 @@ function formatCurrency($amount) {
                     <h2 class="dashboard-title">Tổng Quan Thống Kê</h2>
                     
                     <!-- Overview statistics -->
+                    <!-- Overview statistics -->
+<!-- Overview statistics -->
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="card dashboard-card bg-gradient-primary">
-                                <div class="card-body text-center p-4">
-                                    <div class="card-icon">
-                                        <i class="fas fa-users"></i>
+                        <div class="col-lg-12">
+                            <div class="row justify-content-between">
+                                <div class="col-md-2 mx-auto" style="flex: 0 0 auto; width: 19%;">
+                                    <div class="card dashboard-card bg-gradient-primary" style="height: 200px;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="card-icon" style="font-size: 2.5rem; margin-bottom: 15px;">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <h5 class="card-title">Khách hàng</h5>
+                                            <p class="card-stat" style="font-size: 2.2rem;"><?= $statistics['customers_count'] ?></p>
+                                        </div>
                                     </div>
-                                    <h5 class="card-title">Khách hàng</h5>
-                                    <p class="card-stat"><?= $statistics['customers_count'] ?></p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card dashboard-card bg-gradient-success">
-                                <div class="card-body text-center p-4">
-                                    <div class="card-icon">
-                                        <i class="fas fa-shopping-cart"></i>
+                                <div class="col-md-2 mx-auto" style="flex: 0 0 auto; width: 19%;">
+                                    <div class="card dashboard-card bg-gradient-success" style="height: 200px;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="card-icon" style="font-size: 2.5rem; margin-bottom: 15px;">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <h5 class="card-title">Đơn hàng</h5>
+                                            <p class="card-stat" style="font-size: 2.2rem;"><?= $statistics['orders_count'] ?></p>
+                                        </div>
                                     </div>
-                                    <h5 class="card-title">Đơn hàng</h5>
-                                    <p class="card-stat"><?= $statistics['orders_count'] ?></p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card dashboard-card bg-gradient-info">
-                                <div class="card-body text-center p-4">
-                                    <div class="card-icon">
-                                        <i class="fas fa-newspaper"></i>
+                                <div class="col-md-2 mx-auto" style="flex: 0 0 auto; width: 19%;">
+                                    <div class="card dashboard-card bg-gradient-info" style="height: 200px;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="card-icon" style="font-size: 2.5rem; margin-bottom: 15px;">
+                                                <i class="fas fa-newspaper"></i>
+                                            </div>
+                                            <h5 class="card-title">Tin tức</h5>
+                                            <p class="card-stat" style="font-size: 2.2rem;"><?= $statistics['news_count'] ?></p>
+                                        </div>
                                     </div>
-                                    <h5 class="card-title">Tin tức</h5>
-                                    <p class="card-stat"><?= $statistics['news_count'] ?></p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card dashboard-card bg-gradient-warning">
-                                <div class="card-body text-center p-4">
-                                    <div class="card-icon">
-                                        <i class="fas fa-comments"></i>
+                                <div class="col-md-2 mx-auto" style="flex: 0 0 auto; width: 19%;">
+                                    <div class="card dashboard-card bg-gradient-warning" style="height: 200px;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="card-icon" style="font-size: 2.5rem; margin-bottom: 15px;">
+                                                <i class="fas fa-comments"></i>
+                                            </div>
+                                            <h5 class="card-title">Phản hồi</h5>
+                                            <p class="card-stat" style="font-size: 2.2rem;"><?= $statistics['contacts_count'] ?></p>
+                                        </div>
                                     </div>
-                                    <h5 class="card-title">Phản hồi</h5>
-                                    <p class="card-stat"><?= $statistics['contacts_count'] ?></p>
+                                </div>
+                                <div class="col-md-2 mx-auto" style="flex: 0 0 auto; width: 19%;">
+                                    <div class="card dashboard-card" style="background: linear-gradient(135deg, #FF5722, #FF9800); color: white; height: 200px;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="card-icon" style="font-size: 2.5rem; margin-bottom: 15px;">
+                                                <i class="fas fa-box"></i>
+                                            </div>
+                                            <h5 class="card-title">Sản phẩm</h5>
+                                            <p class="card-stat" style="font-size: 2.2rem;"><?= $statistics['products_count'] ?></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="row mt-5">
-                        <!-- Revenue chart -->
+                        <!-- Revenue by month - now using progress bars -->
                         <div class="col-md-8">
                             <h3 class="dashboard-title">Doanh thu theo tháng</h3>
                             <div class="stats-container">
-                                <canvas id="revenueChart" height="300"></canvas>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">Tháng</th>
+                                                <th width="15%">Doanh thu</th>
+                                                <th width="65%">Biểu đồ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($revenue['monthly'] as $month): ?>
+                                            <?php
+                                                $percentage = ($revenue['max_monthly'] > 0) ? 
+                                                    ($month['revenue'] / $revenue['max_monthly'] * 100) : 0;
+                                            ?>
+                                            <tr>
+                                                <td>Tháng <?= $month['month'] ?></td>
+                                                <td class="text-right"><?= formatCurrency($month['revenue']) ?></td>
+                                                <td>
+                                                    <div class="progress revenue-progress">
+                                                        <div class="progress-bar progress-primary" role="progressbar" 
+                                                            style="width: <?= $percentage ?>%" 
+                                                            aria-valuenow="<?= $month['revenue'] ?>" 
+                                                            aria-valuemin="0" 
+                                                            aria-valuemax="<?= $revenue['max_monthly'] ?>">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         
@@ -233,6 +314,10 @@ function formatCurrency($amount) {
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span>Người dùng:</span>
                                     <span class="fw-bold"><?= $statistics['users_count'] ?></span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Sản phẩm:</span>
+                                    <span class="fw-bold"><?= $statistics['products_count'] ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span>Bình luận:</span>
@@ -280,6 +365,10 @@ function formatCurrency($amount) {
                                                                 case 'pending':
                                                                     $statusClass = 'badge bg-warning';
                                                                     $statusText = 'Đang xử lý';
+                                                                    break;
+                                                                case 'processing':
+                                                                    $statusClass = 'badge bg-warning';
+                                                                    $statusText = 'Đang giao hàng';
                                                                     break;
                                                                 case 'cancelled':
                                                                     $statusClass = 'badge bg-danger';
@@ -331,14 +420,10 @@ function formatCurrency($amount) {
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Popular news section could be added here if needed -->
                 </div>
             </div>
-            </div>
+        </div>
     </div>
-    
-    <!-- Popular news section -->
     
     <!-- footer -->
     <div class="footer-area">
@@ -352,131 +437,13 @@ function formatCurrency($amount) {
             </div>
         </div>
     </div>
-    <!-- Debug -->
-<!-- Debug -->
-<div class="card mt-3">
-    <div class="card-header">Debug Data</div>
-    <div class="card-body">
-        <pre>
-            <?php 
-                echo "Current Year: " . date('Y') . "\n";
-                echo "Monthly Data: "; 
-                print_r($revenue['monthly']); 
-                
-                echo "\nMonthly Data Array for Chart: ";
-                $monthlyDataDebug = array_fill(0, 12, 0);
-                if (!empty($revenue['monthly'])) {
-                    foreach ($revenue['monthly'] as $item) {
-                        if (isset($item['month']) && isset($item['revenue'])) {
-                            $monthIndex = intval($item['month']) - 1;
-                            if ($monthIndex >= 0 && $monthIndex < 12) {
-                                $monthlyDataDebug[$monthIndex] = floatval($item['revenue']);
-                            }
-                        }
-                    }
-                }
-                print_r($monthlyDataDebug);
-            ?>
-        </pre>
-    </div>
-</div>
-</div>
     <!-- end footer -->
-    
+     
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>
     <!-- bootstrap -->
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <!-- main js -->
     <script src="assets/js/main.js"></script>
-    <!-- Chart.js integration -->
-    <script>
-    console.log("Monthly revenue data:", <?php echo json_encode($revenue['monthly']); ?>);
-    console.log("Monthly data for chart:", <?php echo json_encode($monthlyData); ?>);
-    </script>
-    <script>
-        // Revenue chart
-    const revenueChart = new Chart(
-    document.getElementById('revenueChart'),
-    {
-        type: 'bar',
-        data: {
-            labels: [
-                <?php
-                // Tạo mảng tên tháng
-                $monthLabels = [];
-                for ($i = 1; $i <= 12; $i++) {
-                    $monthLabels[] = '"Tháng ' . $i . '"';
-                }
-                echo implode(',', $monthLabels);
-                ?>
-            ],
-            datasets: [{
-                label: 'Doanh thu theo tháng',
-                data: [
-                    <?php
-                    // Khởi tạo mảng 12 tháng với giá trị 0
-                    $monthlyData = array_fill(0, 12, 0);
-                    
-                    // Điền dữ liệu thực tế
-                    if (!empty($revenue['monthly'])) {
-                        foreach ($revenue['monthly'] as $item) {
-                            if (isset($item['month']) && isset($item['revenue'])) {
-                                $monthIndex = intval($item['month']) - 1; // Chuyển từ 1-12 sang 0-11
-                                if ($monthIndex >= 0 && $monthIndex < 12) {
-                                    $monthlyData[$monthIndex] = floatval($item['revenue']);
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Xuất chuỗi dữ liệu
-                    echo implode(',', $monthlyData);
-                    ?>
-                ],
-                backgroundColor: 'rgba(110, 142, 251, 0.7)',
-                borderColor: 'rgb(110, 142, 251)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let value = context.raw;
-                            return 'Doanh thu: ' + new Intl.NumberFormat('vi-VN', { 
-                                style: 'currency', 
-                                currency: 'VND',
-                                maximumFractionDigits: 0
-                            }).format(value);
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return new Intl.NumberFormat('vi-VN', {
-                                style: 'currency',
-                                currency: 'VND',
-                                notation: 'compact',
-                                compactDisplay: 'short',
-                                maximumFractionDigits: 0
-                            }).format(value);
-                        }
-                    }
-                }
-            }
-        }
-    }
-);
-    </script>
 </body>
 </html>

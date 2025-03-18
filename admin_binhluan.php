@@ -12,16 +12,16 @@ function deleteComment($id) {
     global $conn;
     
     try {
-        // Chuẩn bị câu truy vấn DELETE
+        // Xóa bình luận
         $stmt = $conn->prepare("DELETE FROM comments WHERE id = :id");
-        
-        // Bind tham số
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        
-        // Thực hiện truy vấn
         $result = $stmt->execute();
         
         if ($result) {
+            // Đặt lại auto_increment
+            $stmt = $conn->prepare("ALTER TABLE comments AUTO_INCREMENT = 1");
+            $stmt->execute();
+            
             return ["success" => true, "message" => "Đã xóa bình luận thành công"];
         } else {
             return ["success" => false, "message" => "Không thể xóa bình luận"];

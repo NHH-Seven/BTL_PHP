@@ -1,3 +1,4 @@
+
 <?php
 // Include database connection
 require_once 'db_connect.php';
@@ -7,8 +8,13 @@ if (!isset($db_connected) || $db_connected !== true) {
     die("Database connection error");
 }
 
+
 // Initialize or access the shopping cart session
 session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -300,81 +306,72 @@ h2 {
     </div>
     <!--PreLoader Ends-->
 	
-	<!-- header --> <div class="top-header-area" id="sticker">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-sm-12 text-center">
-					<div class="main-menu-wrap">
-						<!-- logo -->
-						<div class="site-logo">
-							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
-							</a>
-						</div>
-						<!-- logo -->
+    <div class="top-header-area" id="sticker">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 text-center">
+                <div class="main-menu-wrap">
+                    <!-- logo -->
+                    <div class="site-logo">
+                        <a href="index.php">
+                            <img src="assets/img/logo.png" alt="">
+                        </a>
+                    </div>
+                    <!-- logo -->
 
-						<!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li ><a href="index.php">Trang Chủ</a>
-								</li>
-								<li><a href="contact.php">Phản Hồi</a></li>
-								</li>
-								<li><a href="news.php">Tin Tức</a>
-								</li>
-								<li><a href="shop.php">Cửa Hàng</a>
-									<ul class="sub-menu">
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="checkout.php">Thanh Toán</a></li>
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-									</ul>
-								</li>
-								<li><a href="#">Trang</a>
-									<ul class="sub-menu">
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-										<li><a href="checkout.php">Thanh TOán</a></li>
-										<li><a href="contact.php">Phản Hồi</a></li>
-										<li><a href="news.php">Tin Tức</a></li>
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="faqq.php">Câu Hỏi</a></li>
-									</ul>
-								</li>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-										<a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- menu start -->
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            </li>
+                            <li><a href="contact.php">Phản Hồi</a></li>
+                            </li>
+                            <li><a href="news.php">Tin Tức</a>
+                            </li>
+                            <li><a href="shop.php">Cửa Hàng</a>
+                                <ul class="sub-menu">
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Trang</a>
+                                <ul class="sub-menu">
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="contact.php">Phản Hồi</a></li>
+                                    <li><a href="news.php">Tin Tức</a></li>
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="faqq.php">Câu Hỏi</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="header-icons">
+                                    <a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+
+                                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                                        <a class="shopping-login" href="user_profile.php" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                                            <i class="fa-solid fa-user-check"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                    <div class="mobile-menu"></div>
+                    <!-- menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<!-- end header -->
 
 	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<!-- end search arewa -->
 	
 	<!-- breadcrumb-section -->
@@ -383,8 +380,8 @@ h2 {
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<p>Fresh and Organic</p>
-						<h1>Cart</h1>
+						<p>Cửa Hàng Bán Thực Phẩm Xanh</p>
+						<h1>Giỏ Hàng</h1>
 					</div>
 				</div>
 			</div>
@@ -413,7 +410,7 @@ h2 {
 					<div class="cart-table-wrap">
                         <?php if (empty($_SESSION['cart'])): ?>
                             <div class="empty-cart-message">
-                                <p>Your cart is empty. <a href="shop.php">Continue shopping</a></p>
+                                <p>Giỏ hàng của bạn trống rỗng. <a href="shop.php">Tiếp Tục Mua Sắm</a></p>
                             </div>
                         <?php else: ?>
                             <form action="cart.php" method="post">
@@ -421,11 +418,11 @@ h2 {
                                     <thead>
                                         <tr>
                                             <th>Remove</th>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
+                                            <th>Ảnh</th>
+                                            <th>Tên</th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Tất cả</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -450,8 +447,8 @@ h2 {
 </tbody>
 </table>
 <div class="cart-buttons">
-    <button type="submit" name="update_cart" class="boxed-btn">Update Cart</button>
-    <a href="shop.php" class="boxed-btn">Continue Shopping</a>
+    <button type="submit" name="update_cart" class="boxed-btn">Cập Nhật Giỏ Hàng</button>
+    <a href="shop.php" class="boxed-btn">Tiếp Tục Mua Sắm</a>
 </div>
 </form>
 <?php endif; ?>
@@ -463,32 +460,32 @@ h2 {
         <table class="total-table">
             <thead class="total-table-head">
                 <tr class="table-total-row">
-                    <th>Total</th>
-                    <th>Price</th>
+                    <th>Tất cả</th>
+                    <th>Giá</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="total-data">
-                    <td><strong>Subtotal:</strong></td>
+                    <td><strong>Tổng phụ:</strong></td>
                     <td>$<?php echo number_format($total_price, 2); ?></td>
                 </tr>
                 <tr class="total-data">
-                    <td><strong>Shipping:</strong></td>
+                    <td><strong>Vận chuyển:</strong></td>
                     <td>$<?php echo ($total_price > 0) ? number_format(15, 2) : '0.00'; ?></td>
                 </tr>
                 <tr class="total-data">
-                    <td><strong>Total:</strong></td>
+                    <td><strong>Tất cả:</strong></td>
                     <td>$<?php echo ($total_price > 0) ? number_format($total_price + 15, 2) : '0.00'; ?></td>
                 </tr>
             </tbody>
         </table>
         <div class="cart-buttons">
-            <a href="checkout.php" class="boxed-btn black">Proceed to Checkout</a>
+            <a href="checkout.php" class="boxed-btn black">Tiến hành thanh toán</a>
         </div>
     </div>
 
     <div class="coupon-section">
-        <h3>Apply Coupon</h3>
+        <h3>Áp dụng phiếu giảm giá</h3>
         <div class="coupon-form-wrap">
             <form action="">
                 <p><input type="text" placeholder="Coupon Code"></p>
@@ -503,100 +500,15 @@ h2 {
 <!-- end cart -->
 
 <!-- logo carousel -->
-<div class="logo-carousel-section">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="logo-carousel-inner">
-                <div class="single-logo-item">
-                    <img src="assets/img/company-logos/1.png" alt="">
-                </div>
-                <div class="single-logo-item">
-                    <img src="assets/img/company-logos/2.png" alt="">
-                </div>
-                <div class="single-logo-item">
-                    <img src="assets/img/company-logos/3.png" alt="">
-                </div>
-                <div class="single-logo-item">
-                    <img src="assets/img/company-logos/4.png" alt="">
-                </div>
-                <div class="single-logo-item">
-                    <img src="assets/img/company-logos/5.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+
 <!-- end logo carousel -->
 
 <!-- footer -->
-<div class="footer-area">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="footer-box about-widget">
-                <h2 class="widget-title">About us</h2>
-                <p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="footer-box get-in-touch">
-                <h2 class="widget-title">Get in Touch</h2>
-                <ul>
-                    <li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-                    <li>support@fruitkha.com</li>
-                    <li>+00 111 222 3333</li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="footer-box pages">
-                <h2 class="widget-title">Trang</h2>
-                <ul>
-                    <li><a href="index.php">Trang Chủ</a></li>
-                    <li><a href="shop.php">Cửa Hàng</a></li>
-                    <li><a href="news.php">Tin Tức</a></li>
-                    <li><a href="contact.php">Phản Hồi</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="footer-box subscribe">
-                <h2 class="widget-title">Subscribe</h2>
-                <p>Subscribe to our mailing list to get the latest updates.</p>
-                <form action="index.php">
-                    <input type="email" placeholder="Email">
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+
 <!-- end footer -->
 
 <!-- copyright -->
-<div class="copyright">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-md-12">
-            <p>Copyrights &copy; 2025 - <a href="https://fruitkha.com/">Fruitkha</a>, All Rights Reserved.</p>
-        </div>
-        <div class="col-lg-6 text-right col-md-12">
-            <div class="social-icons">
-                <ul>
-                    <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-                    <li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+<?php include 'footer.php'; ?>
 <!-- end copyright -->
 
 <!-- jquery -->

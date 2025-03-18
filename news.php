@@ -1,6 +1,11 @@
 <?php
-require_once 'config.php';
+require_once 'db_connect.php';
 session_start();
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Pagination setup
 $results_per_page = 6;
@@ -9,13 +14,18 @@ $offset = ($page - 1) * $results_per_page;
 
 // Get total number of records
 $total_query = "SELECT COUNT(*) as total FROM news";
-$total_result = $conn->query($total_query);
-$total_row = $total_result->fetch_assoc();
+$stmt = $conn->prepare($total_query);
+$stmt->execute();
+$total_row = $stmt->fetch();
 $total_pages = ceil($total_row['total'] / $results_per_page);
 
 // Get news data with pagination
-$sql = "SELECT id, title, excerpt, image, author, published_date FROM news ORDER BY published_date DESC LIMIT $offset, $results_per_page";
-$result = $conn->query($sql);
+$sql = "SELECT id, title, excerpt, image, author, published_date, created_at FROM news ORDER BY id ASC LIMIT :offset, :limit";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindParam(':limit', $results_per_page, PDO::PARAM_INT);
+$stmt->execute();
+$result = $stmt;
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +61,21 @@ $result = $conn->query($sql);
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
 </head>
+<style>
+<?php
+// Generate CSS for news image backgrounds
+$news_items = $stmt->fetchAll();
+if (count($news_items) > 0) {
+    foreach($news_items as $row) {
+        $image_class = !empty($row['image']) ? $row['image'] : 'news-bg-1.jpg';
+        $image_class = str_replace('.jpg', '', $image_class);
+        echo ".{$image_class} { background-image: url('assets/img/latest-news/{$row['image']}'); }\n";
+    }
+    // Reset statement for reuse
+    $stmt->execute();
+}
+?>
+</style>
 <body>
     <!-- [Your existing header HTML] -->
     	
@@ -64,80 +89,71 @@ $result = $conn->query($sql);
 	
 	<!-- header -->
 	<div class="top-header-area" id="sticker">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-sm-12 text-center">
-					<div class="main-menu-wrap">
-						<!-- logo -->
-						<div class="site-logo">
-							<a href="index.php">
-								<img src="assets/img/logo.png" alt="">
-							</a>
-						</div>
-						<!-- logo -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 text-center">
+                <div class="main-menu-wrap">
+                    <!-- logo -->
+                    <div class="site-logo">
+                        <a href="index.php">
+                            <img src="assets/img/logo.png" alt="">
+                        </a>
+                    </div>
+                    <!-- logo -->
 
-						<!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li ><a href="index.php">Trang Chủ</a>
-								</li>
-								<li><a href="contact.php">Phản Hồi</a></li>
-								</li>
-								<li class="current-list-item"><a href="news.php">Tin Tức</a>
-								</li>
-								<li><a href="shop.php">Cửa Hàng</a>
-									<ul class="sub-menu">
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="checkout.php">Thanh Toán</a></li>
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-									</ul>
-								</li>
-								<li><a href="#">Trang</a>
-									<ul class="sub-menu">
-										<li><a href="cart.php">Giỏ Hàng</a></li>
-										<li><a href="checkout.php">Thanh TOán</a></li>
-										<li><a href="contact.php">Phản Hồi</a></li>
-										<li><a href="news.php">Tin Tức</a></li>
-										<li><a href="shop.php">Cửa Hàng</a></li>
-										<li><a href="faqq.php">Câu Hỏi</a></li>
-									</ul>
-								</li>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-										<a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- menu start -->
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            </li>
+                            <li><a href="contact.php">Phản Hồi</a></li>
+                            </li>
+                            <li><a href="news.php">Tin Tức</a>
+                            </li>
+                            <li><a href="shop.php">Cửa Hàng</a>
+                                <ul class="sub-menu">
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Trang</a>
+                                <ul class="sub-menu">
+                                    <li><a href="cart.php">Giỏ Hàng</a></li>
+                                    <li><a href="checkout.php">Thanh Toán</a></li>
+                                    <li><a href="contact.php">Phản Hồi</a></li>
+                                    <li><a href="news.php">Tin Tức</a></li>
+                                    <li><a href="shop.php">Cửa Hàng</a></li>
+                                    <li><a href="faqq.php">Câu Hỏi</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="header-icons">
+                                    <a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+
+                                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                                        <a class="shopping-login" href="user_profile.php" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                                            <i class="fa-solid fa-user-check"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="shopping-login" href="login.php"><i class="fa-solid fa-user"></i></a>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                    <div class="mobile-menu"></div>
+                    <!-- menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<!-- end header -->
 
 	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<!-- end search arewa -->
 	
     <!-- breadcrumb-section -->
@@ -160,8 +176,8 @@ $result = $conn->query($sql);
         <div class="container">
             <div class="row">
                 <?php
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
+                if ($result->rowCount() > 0) {
+                    foreach($result as $row) {
                         // Get the image filename
                         $image_class = !empty($row['image']) ? $row['image'] : 'news-bg-1.jpg';
                         $image_class = str_replace('.jpg', '', $image_class);
@@ -218,101 +234,9 @@ $result = $conn->query($sql);
     <!-- end latest news -->
 
 <!-- logo carousel -->
-<div class="logo-carousel-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="logo-carousel-inner">
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/1.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/2.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/3.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/4.png" alt="">
-						</div>
-						<div class="single-logo-item">
-							<img src="assets/img/company-logos/5.png" alt="">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end logo carousel -->
 
-	<!-- footer -->
-	<div class="footer-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box about-widget">
-						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box get-in-touch">
-						<h2 class="widget-title">Get in Touch</h2>
-						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box pages">
-						<h2 class="widget-title">Pages</h2>
-						<ul>
-							<li><a href="index.php">Trang Chủ</a></li>
-							<li><a href="shop.php">Cửa Hàng</a></li>
-							<li><a href="news.php">Tin Tức</a></li>
-							<li><a href="contact.php">Phản Hồi</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.php">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end footer -->
-	
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<!-- end copyright -->
+	<?php include 'footer.php'; ?>
 	
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>

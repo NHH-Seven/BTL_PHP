@@ -172,11 +172,11 @@
             <h1>Đăng ký</h1>
             <p>Tạo tài khoản mới</p>
         </div>
-        <?php if (isset($error)): ?>
-            <div class="alert alert-error"><?php echo $error; ?></div>
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-error"><?php echo $_GET['error']; ?></div>
         <?php endif; ?>
-        <?php if (isset($success)): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success"><?php echo $_GET['success']; ?></div>
         <?php endif; ?>
         <form action="process_signup.php" method="POST">
             <div class="form-group">

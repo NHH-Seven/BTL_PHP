@@ -98,7 +98,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
@@ -109,7 +109,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                                 <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                                     </div>
                                 </li>
                             </ul>
@@ -129,8 +129,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
-                        <h1>Manage Users</h1>
+                        <p>Trang Quản Lý</p>
+                        <h1>Quản Lý Người Dùng</h1>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h2><?php echo $editUser ? 'Edit User' : 'Add New User'; ?></h2>
+                    <h2><?php echo $editUser ? 'Sửa Thông Tin Người Dùng' : 'Thêm Người Dùng Mới'; ?></h2>
                     <div class="admin-form">
                         <form action="admin_user.php" method="post">
                             <input type="hidden" name="action" value="<?php echo $editUser ? 'update' : 'add'; ?>">
@@ -179,17 +179,17 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="password">Password:</label>
+                                        <label for="password">Mật Khẩu:</label>
                                         <input type="password" id="password" name="password" class="form-control" 
                                                <?php echo $editUser ? '' : 'required'; ?>>
                                         <?php if ($editUser): ?>
-                                            <div class="password-info">Leave empty if you don't want to change the password</div>
+                                            <div class="password-info">Để trống nếu bạn không muốn thay đổi mật khẩu</div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="role">Role:</label>
+                                        <label for="role">Quyền:</label>
                                         <select class="form-control" id="role" name="role" required>
                                             <option value="admin" <?php echo ($editUser && $editUser['role'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
                                             <option value="user" <?php echo ($editUser && $editUser['role'] === 'user') ? 'selected' : ''; ?>>User</option>
@@ -203,7 +203,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                                     <?php echo $editUser ? 'Update User' : 'Add User'; ?>
                                 </button>
                                 <?php if ($editUser): ?>
-                                    <a href="admin_user_view.php" class="btn btn-secondary">Cancel</a>
+                                    <a href="admin_user_view.php" class="btn btn-secondary">Hủy</a>
                                 <?php endif; ?>
                             </div>
                         </form>
@@ -217,15 +217,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                                     <th>ID</th>
                                     <th>Username</th>
                                     <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Created Date</th>
-                                    <th>Actions</th>
+                                    <th>Quyền</th>
+                                    <th>Ngày Tạo</th>
+                                    <th>Thực hiện</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (empty($users)): ?>
                                     <tr>
-                                        <td colspan="6" class="text-center">No users found</td>
+                                        <td colspan="6" class="text-center">Không có người dùng</td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($users as $user): ?>
@@ -237,10 +237,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                                             <td><?php echo htmlspecialchars($user['created_at'] ?? 'N/A'); ?></td>
                                             <td class="action-buttons">
                                                 <a href="admin_user_view.php?action=edit&id=<?php echo $user['id']; ?>" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i> Sửa
                                                 </a>
                                                 <button onclick="confirmDelete(<?php echo $user['id']; ?>)" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-trash"></i> Xóa
                                                 </button>
                                             </td>
                                         </tr>
@@ -254,6 +254,25 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
         </div>
     </div>
     <!-- end admin section -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <p>Copyrights &copy; 2025 - <a href="https://fruitkha.com/">Fruitkha</a>, All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>

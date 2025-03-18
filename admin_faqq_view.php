@@ -98,18 +98,18 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index_2.html">Trang Quản Lý</a></li>
+                                <li><a href="index_2.php">Trang Quản Lý</a></li>
                                 <li><a href="admin_news.php">Tin Tức</a></li>
                                 <li><a href="admin_products.php">Sản Phẩm</a></li>
                                 <li><a href="admin_customer_view.php">Khách Hàng</a></li>
-                                <li><a href="admin_checkout.php">Đơn Hàng</a></li>
+                                <li><a href="admin_checkout_view.php">Đơn Hàng</a></li>
                                 <li class="current-list-item"><a href="admin_faqq.php">Câu Hỏi</a></li>
                                 <li><a href="admin_binhluan_view.php">Bình Luận</a></li>
-                                <li><a href="admin_users.php">Tài Khoản</a></li>
-                                <li><a href="admin_thongke.php">Thống Kê</a></li>
+                                <li><a href="admin_user_view.php">Tài Khoản</a></li>
+                                <li><a href="admin_static_view.php">Thống Kê</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                                     </div>
                                 </li>
                             </ul>
@@ -129,8 +129,8 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Admin Panel</p>
-                        <h1>Manage FAQs</h1>
+                        <p>Trang Quản Lý</p>
+                        <h1>Quản Lý Câu Hỏi</h1>
                     </div>
                 </div>
             </div>
@@ -160,18 +160,18 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
                             <?php endif; ?>
                             
                             <div class="form-group">
-                                <label for="question">Question:</label>
+                                <label for="question">Câu Hỏi:</label>
                                 <input type="text" class="form-control" id="question" name="question" 
                                        value="<?php echo $faq_edit ? htmlspecialchars($faq_edit['question']) : ''; ?>" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="answer">Answer:</label>
+                                <label for="answer">Câu Trả Lời:</label>
                                 <textarea class="form-control" id="answer" name="answer" rows="5" required><?php echo $faq_edit ? htmlspecialchars($faq_edit['answer']) : ''; ?></textarea>
                             </div>
                             
                             <div class="form-group">
-                                <label for="display_order">Display Order:</label>
+                                <label for="display_order">Thứ tự hiển thị:</label>
                                 <input type="number" class="form-control" id="display_order" name="display_order" min="1" 
                                        value="<?php echo $faq_edit ? $faq_edit['display_order'] : (count($faqs) + 1); ?>">
                             </div>
@@ -181,23 +181,23 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
                                     <?php echo $faq_edit ? 'Update FAQ' : 'Add FAQ'; ?>
                                 </button>
                                 <?php if ($faq_edit): ?>
-                                    <a href="admin_faqq_view.php" class="btn btn-secondary">Cancel</a>
+                                    <a href="admin_faqq_view.php" class="btn btn-secondary">Xóa</a>
                                 <?php endif; ?>
                             </div>
                         </form>
                     </div>
 
                     <div class="faq-list">
-                        <h3>Existing FAQs</h3>
+                        <h3>Câu hỏi thường gặp hiện có</h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Question</th>
-                                    <th>Answer</th>
-                                    <th>Display Order</th>
-                                    <th>Created Date</th>
-                                    <th>Actions</th>
+                                    <th>Câu Hỏi</th>
+                                    <th>Câu Trả Lời</th>
+                                    <th>Thứ Tự Hiển Thị</th>
+                                    <th>Ngày Tạo</th>
+                                    <th>Thực Hiện</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,7 +229,7 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="6" class="text-center">No FAQs found</td>
+                                        <td colspan="6" class="text-center">Không tìm thấy câu hỏi thường gặp</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -246,43 +246,22 @@ if (isset($_GET['edit']) && !empty($_GET['edit'])) {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Xác nhận xóa</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this FAQ? This action cannot be undone.
+                Bạn có chắc chắn muốn xóa Câu hỏi thường gặp này không? Hành động này không thể hoàn tác.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Confirm Delete</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Xác nhận xóa</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- footer -->
-    <div class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="footer-box about-widget">
-                        <h2 class="widget-title">About us</h2>
-                        <p>Your trusted source for fresh, organic produce and quality groceries. We're committed to supporting local farmers and providing sustainable food options to our community.</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="footer-box get-in-touch">
-                        <h2 class="widget-title">Get in Touch</h2>
-                        <ul>
-                            <li>123 Market Street, City Center</li>
-                            <li>support@fruitkha.com</li>
-                            <li>+00 111 222 3333</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <!-- end footer -->
 
     <!-- copyright -->
