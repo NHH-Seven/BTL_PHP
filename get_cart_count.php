@@ -2,7 +2,7 @@
 // Start session
 session_start();
 
-// Calculate total items in cart
+// Tính tổng số mặt hàng trong giỏ hàng
 $total_items = 0;
 
 if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {

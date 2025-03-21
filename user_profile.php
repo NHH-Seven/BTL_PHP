@@ -2,13 +2,13 @@
 session_start();
 require_once 'db_connect.php';
 
-// Check if user is logged in
+// Kiểm tra xem người dùng đã đăng nhập chưa
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-// Get user information
+// Nhận thông tin người dùng
 $user_id = $_SESSION['user_id'];
 $error_msg = "";
 $success_msg = "";
@@ -22,22 +22,22 @@ try {
     $error_msg = "Error fetching user data: " . $e->getMessage();
 }
 
-// Process form submission to update user info
+// Xử lý gửi biểu mẫu để cập nhật thông tin người dùng
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     
     try {
-        // Check if password field is not empty
+        // Kiểm tra xem trường mật khẩu có trống không
         if (!empty($password)) {
-            // Update email and password
+            // Cập nhật email và mật khẩu
             $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
             $update_stmt = $conn->prepare("UPDATE users SET email = :email, password = :password WHERE id = :user_id");
             $update_stmt->bindParam(':email', $email);
             $update_stmt->bindParam(':password', $hashed_password);
             $update_stmt->bindParam(':user_id', $user_id);
         } else {
-            // Update only email
+            // Chỉ cập nhật email
             $update_stmt = $conn->prepare("UPDATE users SET email = :email WHERE id = :user_id");
             $update_stmt->bindParam(':email', $email);
             $update_stmt->bindParam(':user_id', $user_id);
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
         if ($update_stmt->execute()) {
             $success_msg = "Thông tin đã được cập nhật thành công!";
             
-            // Refresh user data
+            // Làm mới dữ liệu người dùng
             $stmt = $conn->prepare("SELECT * FROM users WHERE id = :user_id");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();

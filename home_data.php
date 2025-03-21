@@ -23,7 +23,7 @@ function getLatestNews($limit = 3) {
     global $conn;
     
     try {
-        $stmt = $conn->prepare("SELECT id, title, excerpt, content, image, author, published_date FROM news ORDER BY published_date DESC LIMIT :limit");
+        $stmt = $conn->prepare("SELECT id, title, excerpt, content, image, author, published_date FROM news ORDER BY published_date ASC LIMIT :limit");
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         

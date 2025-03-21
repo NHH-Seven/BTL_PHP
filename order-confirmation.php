@@ -1,19 +1,13 @@
 <?php
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fruit_shop";
+// Include database connection from db_connect.php
+require_once('db_connect.php');
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Kiểm tra xem kết nối có thành công không
+if (!isset($db_connected) || $db_connected !== true) {
+    die("Database connection failed");
 }
 
-// Get order ID from URL parameter
+// Lấy ID đơn hàng từ tham số URL
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
 if ($order_id <= 0) {
@@ -21,41 +15,34 @@ if ($order_id <= 0) {
     exit;
 }
 
-// Get order details
+// Nhận chi tiết đơn hàng
 $sql = "SELECT o.order_id, o.total_amount, o.created_at, o.status, 
                c.name, c.email, c.address, c.phone
         FROM orders o
         JOIN customers c ON o.customer_id = c.customer_id
-        WHERE o.order_id = ?";
+        WHERE o.order_id = :order_id";
         
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $order_id);
+$stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
 
-if ($result->num_rows == 0) {
+if ($stmt->rowCount() == 0) {
     echo "Order not found";
     exit;
 }
 
-$order = $result->fetch_assoc();
+$order = $stmt->fetch();
 
-// Get order items
+// Nhận các mặt hàng đặt hàng
 $sql = "SELECT product_name, quantity, price
         FROM order_items
-        WHERE order_id = ?";
+        WHERE order_id = :order_id";
         
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $order_id);
+$stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
-$items_result = $stmt->get_result();
 
-$items = [];
-while ($row = $items_result->fetch_assoc()) {
-    $items[] = $row;
-}
-
-$conn->close();
+$items = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -168,12 +155,12 @@ $conn->close();
                     <div class="order-success-wrapper">
                         <div class="alert alert-success text-center">
                             <i class="fas fa-check-circle fa-3x mb-3"></i>
-                            <h3>Your order has been received</h3>
-                            <p>Thank you for your purchase!</p>
+                            <h3>Đơn hàng của bạn đã được nhận</h3>
+                            <p>Cảm ơn bạn đã mua hàng!</p>
                         </div>
                         
                         <div class="order-details mt-5">
-                            <h4>Order Details</h4>
+                            <h4>Chi tiết đơn hàng</h4>
                             <table class="table">
                                 <tr>
                                     <th>Order Number:</th>
@@ -188,14 +175,14 @@ $conn->close();
                                     <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
                                 </tr>
                                 <tr>
-                                    <th>Payment Method:</th>
-                                    <td>Credit Card</td>
+                                    <th>Phương thức thanh toán:</th>
+                                    <td>Thẻ tín dụng</td>
                                 </tr>
                             </table>
                         </div>
                         
                         <div class="customer-details mt-5">
-                            <h4>Customer Information</h4>
+                            <h4>Thông tin khách hàng</h4>
                             <table class="table">
                                 <tr>
                                     <th>Name:</th>
@@ -217,7 +204,7 @@ $conn->close();
                         </div>
                         
                         <div class="order-items mt-5">
-                            <h4>Order Items</h4>
+                            <h4>Đặt hàng các mặt hàng</h4>
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -245,7 +232,7 @@ $conn->close();
                         </div>
                         
                         <div class="text-center mt-5">
-                            <a href="index.php" class="boxed-btn">Continue Shopping</a>
+                            <a href="index.php" class="boxed-btn">Tiếp tục mua sắm</a>
                         </div>
                     </div>
                 </div>

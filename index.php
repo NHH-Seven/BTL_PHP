@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // Include the home data file
 require_once 'home_data.php';
-// Get featured products and latest news
+// Nhận các sản phẩm nổi bật và tin tức mới nhất
 $featuredProducts = getFeaturedProducts(3);
 $latestNews = getLatestNews(3);
 ?>
@@ -123,11 +123,11 @@ $latestNews = getLatestNews(3);
 					<div class="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
 						<div class="hero-text">
 							<div class="hero-text-tablecell">
-								<p class="subtitle">Fresh & Organic</p>
-								<h1>Delicious Seasonal Fruits</h1>
+								<p class="subtitle">Tươi & Hữu cơ</p>
+								<h1>Trái cây theo mùa ngon</h1>
 								<div class="hero-btns">
-									<a href="shop.php" class="boxed-btn">Fruit Collection</a>
-									<a href="contact.php" class="bordered-btn">Contact Us</a>
+									<a href="shop.php" class="boxed-btn">Cửa Hàng </a>
+									<a href="contact.php" class="bordered-btn">Phản Hồi</a>
 								</div>
 							</div>
 						</div>
@@ -142,11 +142,11 @@ $latestNews = getLatestNews(3);
 					<div class="col-lg-10 offset-lg-1 text-center">
 						<div class="hero-text">
 							<div class="hero-text-tablecell">
-								<p class="subtitle">Fresh Everyday</p>
-								<h1>100% Organic Collection</h1>
+								<p class="subtitle">Tươi mới mỗi ngày</p>
+								<h1>Bộ sưu tập 100% hữu cơ</h1>
 								<div class="hero-btns">
-									<a href="shop.php" class="boxed-btn">Visit Shop</a>
-									<a href="contact.php" class="bordered-btn">Contact Us</a>
+									<a href="shop.php" class="boxed-btn">Tới cửa hàng</a>
+									<a href="contact.php" class="bordered-btn">liên hệ</a>
 								</div>
 							</div>
 						</div>
@@ -161,11 +161,11 @@ $latestNews = getLatestNews(3);
 					<div class="col-lg-10 offset-lg-1 text-right">
 						<div class="hero-text">
 							<div class="hero-text-tablecell">
-								<p class="subtitle">Mega Sale Going On!</p>
-								<h1>Get December Discount</h1>
+								<p class="subtitle">Đang có chương trình khuyến mại lớn!</p>
+								<h1>Nhận giảm giá tháng 12</h1>
 								<div class="hero-btns">
-									<a href="shop.php" class="boxed-btn">Visit Shop</a>
-									<a href="contact.php" class="bordered-btn">Contact Us</a>
+									<a href="shop.php" class="boxed-btn">Tới Shop</a>
+									<a href="contact.php" class="bordered-btn">Phản Hồi</a>
 								</div>
 							</div>
 						</div>
@@ -186,8 +186,8 @@ $latestNews = getLatestNews(3);
 							<i class="fas fa-shipping-fast"></i>
 						</div>
 						<div class="content">
-							<h3>Free Shipping</h3>
-							<p>When order over $75</p>
+							<h3>Miễn Phí Vận Chuyển</h3>
+							<p>Khi đặt hàng trên $75</p>
 						</div>
 					</div>
 				</div>
@@ -197,8 +197,8 @@ $latestNews = getLatestNews(3);
 							<i class="fas fa-phone-volume"></i>
 						</div>
 						<div class="content">
-							<h3>24/7 Support</h3>
-							<p>Get support all day</p>
+							<h3>Hỗ Trợ 24/7</h3>
+							<p>Hỗ trợ tất cả các ngày trong tuần</p>
 						</div>
 					</div>
 				</div>
@@ -208,8 +208,8 @@ $latestNews = getLatestNews(3);
 							<i class="fas fa-sync"></i>
 						</div>
 						<div class="content">
-							<h3>Refund</h3>
-							<p>Get refund within 3 days!</p>
+							<h3>Đền bù</h3>
+							<p>Nhận hoàn tiền trong vòng 3 ngày!</p>
 						</div>
 					</div>
 				</div>
@@ -224,8 +224,8 @@ $latestNews = getLatestNews(3);
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+						<h3><span class="orange-text">Sản Phẩm</span>Của Chúng Tôi </h3>
+						<p>Các Sản Phẩm Nổi Bật Của Chúng Tôi</p>
 					</div>
 				</div>
 			</div>
@@ -280,7 +280,7 @@ $latestNews = getLatestNews(3);
     	<div class="container">
         	<h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
             <div class="sale-percent"><span>Sale! <br> Upto</span>50%<span>off</span></div>
-            <a href="shop.html" class="cart-btn btn-lg">Shop Now</a>
+            <a href="shop.php" class="cart-btn btn-lg">Shop Now</a>
         </div>
     </section>
 	<!-- end shop banner -->
@@ -290,8 +290,8 @@ $latestNews = getLatestNews(3);
         <div class="row">
             <div class="col-lg-8 offset-lg-2 text-center">
                 <div class="section-title">	
-                    <h3><span class="orange-text">Our</span> News</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+                    <h3><span class="orange-text">Bài Viết</span> Của Chúng Tôi </h3>
+                    <p>Các Bài Viêt Nổi Bật Của Chúng Tôi</p>
                 </div>
             </div>
         </div>
@@ -301,7 +301,7 @@ $latestNews = getLatestNews(3);
             if (!empty($latestNews)): 
                 foreach ($latestNews as $news): 
                     // Xử lý tên lớp CSS từ giá trị hình ảnh
-                    $image_class = !empty($news['image']) ? str_replace('.jpg', '', $news['image']) : 'news-bg-1';
+                    $image_class = !empty($news['image']) ? str_replace('.jpg', '', $news['image']) : 'hoa/news-bg-1';
             ?>
             <div class="col-lg-4 col-md-6">
                 <div class="single-latest-news">
@@ -337,25 +337,32 @@ $latestNews = getLatestNews(3);
 </div>
 
 	<!-- jquery -->
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<script src="assets/js/jquery-1.11.3.min.js"></script><!--Thư viện jQuery hỗ trợ thao tác DOM, hiệu ứng, AJAX.-->
 	<!-- bootstrap -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script><!--Các tính năng giao diện động của Bootstrap.-->
 	<!-- count down -->
-	<script src="assets/js/jquery.countdown.js"></script>
+	<script src="assets/js/jquery.countdown.js"></script><!--Hiển thị bộ đếm ngược thời gian.-->
 	<!-- isotope -->
-	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script><!--Lọc, sắp xếp nội dung theo dạng lưới động..-->
 	<!-- waypoints -->
 	<script src="assets/js/waypoints.js"></script>
+<!--Kích hoạt sự kiện khi cuộn trang..-->
 	<!-- owl carousel -->
 	<script src="assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
+	<!--Tạo slider/băng chuyền ảnh..-->
+	<!-- magnific popup 
+	 ..-->
 	<script src="assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
+	<!-- mean menu 
+	 Hiển thị popup đẹp mắt..-->
 	<script src="assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
+	<!-- sticker js
+	 Chuyển menu thành dạng mobile-friendly.. -->
 	<script src="assets/js/sticker.js"></script>
-	<!-- main js -->
+	<!--
+	 	Làm thanh menu cố định khi cuộn trang..
+-->
 	<script src="assets/js/main.js"></script>
-	<!-- [Keep all other scripts unchanged] -->
+	<!-- Cấu hình chung, hiệu ứng tùy chỉnh của trang web. -->
 </body>
 </html>

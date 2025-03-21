@@ -52,7 +52,7 @@ function getUserById($id) {
 function addUser($username, $password, $email, $role) {
     global $conn;
     try {
-        // Hash password for security
+        // Mật khẩu băm để bảo mật
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         
         $stmt = $conn->prepare("INSERT INTO users (username, password, email, role, created_at) 

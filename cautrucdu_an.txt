@@ -1,0 +1,50 @@
+----- Bảng cấu trúc mã nguồn của trang web
+Tên tệp / Thư mục	Giải thích
+Assets/	Thư mục to chứa các thư mục con của trang web.
+Assets/Bootstrap/	Thư mục chứa các thư mục js css của bootstrap
+Assets/Bootstrap/css/	Thư mục chứa các tệp css của bootstrap
+Assets/Bootstrap/js/	Thư mục chứa các tệp js của bootstrap
+Assets/img	Thư mục chứa các thư mục hình ảnh của trang web.
+Assets/img/company-logos/	Thư mục chứa các hình ảnh logo của trang web.
+Assets/img/latest-news/	Thư mục chứa các hình ảnh bài viết của trang web.
+Assets/img/products/	Thư mục chứa các hình ảnh sản phẩm của trang web.
+Assets/img/avaters/	Thư mục chứa các hình ảnh bình luận của trang web.
+Assets/css/	Thư mục chưa các tệp css của trang web
+Assets/js/	Thư mục chưa các tệp js của trang web
+Assets/webfonts/	Thư mục chưa các tệp webfonts
+admin_binhluan_view.php	Trang quản lý bình luận
+admin_binhluan.php	Xử lý logic trang quản lý bình luận
+admin_checkout_view.php	Trang quản lý hóa đơn
+admin_checkout.php	Xử lý logic trang quản lý hóa đơn
+login.php	Giao diện đăng nhập.
+logout.php	Xử lý đăng xuất người dùng.
+process_login.php	Xử lý logic trang đăng nhập
+process_signup.php	Xử lý logic trang đăng kí
+signup.php	Giao diện đăng kí
+admin_contact_view.php	Trang quản lý phản hồi
+admin_contact.php	Xử lý logic trang quản lý phản hồi
+admin_customer_view.php	Trang quản lý khách hàng
+admin_customer.php	Xử lý logic trang quản lý khách hàng
+admin_faqq_view.php	Trang quản lý câu hỏi
+admin_faqq.php	Xử lý logic trang quản lý câu hỏi
+admin_news_view.php	Trang quản lý bài viết
+admin_news.php	Xử lý logic trang quản lý bài viết
+admin_products_view.php	Trang quản lý sản phẩm
+admin_products.php	Xử lý logic trang quản lý sản phẩm
+admin_static_view.php	Trang thống kê
+admin_static.php	Xử lý logic trang thống kê
+admin_user_view.php	Trang quản lý người dùng
+admin_user.php	Xử lý logic trang quản lý người dùng
+cart.php	Trang giỏ hàng
+checkout_logic.php	Xử lý logic trang thanh toán
+checkout.php	Trang thanh toán
+contact.php	Trang phản hồi
+db_connect.php	Tệp PHP dùng để kết nối cơ sở dữ liệu.
+faqq.php	Trang câu hỏi thường gặp
+index.php	Trang chính của web 
+news.php	Trang bài viết
+order-confirmation.php	Xử lý logic khi thanh toán thành công
+shop.php	Trang cửa hàng
+single-news.php	Trang chi tiết bài viết
+login.css	CSS của trang đăng nhập
+

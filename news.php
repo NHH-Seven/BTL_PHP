@@ -2,24 +2,24 @@
 require_once 'db_connect.php';
 session_start();
 
-// Start session if not already started
+// Bắt đầu phiên nếu chưa bắt đầu
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Pagination setup
+// Thiết lập phân trang
 $results_per_page = 6;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $results_per_page;
 
-// Get total number of records
+// Nhận tổng số bản ghi
 $total_query = "SELECT COUNT(*) as total FROM news";
 $stmt = $conn->prepare($total_query);
 $stmt->execute();
 $total_row = $stmt->fetch();
 $total_pages = ceil($total_row['total'] / $results_per_page);
 
-// Get news data with pagination
+// Nhận dữ liệu tin tức bằng cách phân trang
 $sql = "SELECT id, title, excerpt, image, author, published_date, created_at FROM news ORDER BY id ASC LIMIT :offset, :limit";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
@@ -63,7 +63,7 @@ $result = $stmt;
 </head>
 <style>
 <?php
-// Generate CSS for news image backgrounds
+// Tạo CSS cho nền hình ảnh tin tức
 $news_items = $stmt->fetchAll();
 if (count($news_items) > 0) {
     foreach($news_items as $row) {
@@ -71,7 +71,7 @@ if (count($news_items) > 0) {
         $image_class = str_replace('.jpg', '', $image_class);
         echo ".{$image_class} { background-image: url('assets/img/latest-news/{$row['image']}'); }\n";
     }
-    // Reset statement for reuse
+    // Đặt lại câu lệnh để sử dụng lại
     $stmt->execute();
 }
 ?>
@@ -104,11 +104,11 @@ if (count($news_items) > 0) {
                     <!-- menu start -->
                     <nav class="main-menu">
                         <ul>
-                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            <li ><a href="index.php">Trang Chủ</a>
                             </li>
                             <li><a href="contact.php">Phản Hồi</a></li>
                             </li>
-                            <li><a href="news.php">Tin Tức</a>
+                            <li class="current-list-item"><a href="news.php">Tin Tức</a>
                             </li>
                             <li><a href="shop.php">Cửa Hàng</a>
                                 <ul class="sub-menu">
@@ -162,8 +162,8 @@ if (count($news_items) > 0) {
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <p>Organic Information</p>
-                        <h1>News Article</h1>
+                        <p>Thông tin hữu ích</p>
+                        <h1>Bài viết tin tức</h1>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@ if (count($news_items) > 0) {
                 <?php
                 if ($result->rowCount() > 0) {
                     foreach($result as $row) {
-                        // Get the image filename
+                        // Nhận tên tệp hình ảnh
                         $image_class = !empty($row['image']) ? $row['image'] : 'news-bg-1.jpg';
                         $image_class = str_replace('.jpg', '', $image_class);
                 ?>

@@ -3,7 +3,7 @@ session_start();
 // Kết nối đến cơ sở dữ liệu
 require_once 'db_connect.php';
 
-// Start session if not already started
+// Bắt đầu phiên nếu chưa bắt đầu
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -137,7 +137,7 @@ try {
                     <!-- menu start -->
                     <nav class="main-menu">
                         <ul>
-                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            <li ><a href="index.php">Trang Chủ</a>
                             </li>
                             <li><a href="contact.php">Phản Hồi</a></li>
                             </li>
@@ -157,7 +157,7 @@ try {
                                     <li><a href="contact.php">Phản Hồi</a></li>
                                     <li><a href="news.php">Tin Tức</a></li>
                                     <li><a href="shop.php">Cửa Hàng</a></li>
-                                    <li><a href="faqq.php">Câu Hỏi</a></li>
+                                    <li class="current-list-item"><a href="faqq.php">Câu Hỏi</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -194,7 +194,7 @@ try {
 				<div class="row">
 					<div class="col-lg-8 offset-lg-2 text-center">
 						<div class="breadcrumb-text">
-							<p>Fresh and Organic</p>
+							<p>Câu Hỏi Thường Gặp</p>
 							<h1>F A Q</h1>
 						</div>
 					</div>
@@ -206,11 +206,11 @@ try {
 	<div class="faq-section">
 		<div class="container">
 			<div class="faq-title">
-				<h2>Frequently Asked Questions</h2>
-				<p>Find answers to the most commonly asked questions about our products and services. If you need further assistance, please reach out to us directly.</p>
+				<h2>Những câu hỏi thường gặp</h2>
+				<p>Tìm câu trả lời cho những câu hỏi thường gặp nhất về sản phẩm và dịch vụ của chúng tôi. Nếu bạn cần thêm trợ giúp, vui lòng liên hệ trực tiếp với chúng tôi.</p>
 			</div>
 			
-			<!-- FAQ Questions and Answers -->
+			<!-- Câu hỏi và câu trả lời thường gặp -->
 			<div class="faq-content">
 				<?php if(empty($faqs)): ?>
 					<div class="alert alert-info">Hiện tại chưa có câu hỏi thường gặp nào được thêm vào.</div>

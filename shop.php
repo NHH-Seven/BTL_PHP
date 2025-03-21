@@ -6,12 +6,12 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include database connection
 require_once 'db_connect.php';
 
-// Check if database connection is established
+// Kiểm tra xem kết nối cơ sở dữ liệu đã được thiết lập chưa
 if (!isset($db_connected) || $db_connected !== true) {
     die("Database connection error");
 }
 
-// Fetch products from the database
+// Tìm nạp sản phẩm từ cơ sở dữ liệu
 try {
     $query = "SELECT * FROM products WHERE status = 'active'";
     $stmt = $conn->prepare($query);
@@ -82,13 +82,13 @@ try {
                     <!-- menu start -->
                     <nav class="main-menu">
                         <ul>
-                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            <li ><a href="index.php">Trang Chủ</a>
                             </li>
                             <li><a href="contact.php">Phản Hồi</a></li>
                             </li>
                             <li><a href="news.php">Tin Tức</a>
                             </li>
-                            <li><a href="shop.php">Cửa Hàng</a>
+                            <li class="current-list-item"><a href="shop.php">Cửa Hàng</a>
                                 <ul class="sub-menu">
                                     <li><a href="shop.php">Cửa Hàng</a></li>
                                     <li><a href="checkout.php">Thanh Toán</a></li>
@@ -131,22 +131,7 @@ try {
 	<!-- end header -->
 
 	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	<!-- end search arewa -->
 	
 	<!-- breadcrumb-section -->
@@ -155,8 +140,8 @@ try {
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<p>Fresh and Organic</p>
-						<h1>Shop</h1>
+						<p>Tươi và hữu cơ</p>
+						<h1>Cửa Hàng</h1>
 					</div>
 				</div>
 			</div>
@@ -172,9 +157,9 @@ try {
                 <div class="col-md-12">
                     <div class="product-filters">
                         <ul>
-                            <li class="active" data-filter="*">All</li>
+                            <li class="active" data-filter="*">tất cả</li>
                             <?php
-                            // Get unique categories
+                            // Nhận danh mục độc đáo
                             $categories = [];
                             foreach ($products as $product) {
                                 if (!in_array($product['category'], $categories)) {
@@ -182,7 +167,7 @@ try {
                                 }
                             }
                             
-                            // Display category filters
+                            // Bộ lọc danh mục hiển thị
                             foreach ($categories as $category) {
                                 echo '<li data-filter=".' . $category . '">' . ucfirst($category) . '</li>';
                             }
@@ -218,11 +203,9 @@ try {
 				<div class="col-lg-12 text-center">
 					<div class="pagination-wrap">
 						<ul>
-							<li><a href="#">Prev</a></li>
-							<li><a href="#">1</a></li>
-							<li><a class="active" href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">Next</a></li>
+							<li><a href="#">trước</a></li>
+							<li><a class="active" href="#">1</a></li>
+							<li><a href="#">sau</a></li>
 						</ul>
 					</div>
 				</div>
@@ -283,16 +266,16 @@ try {
 	<script src="assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
-	// Add this JavaScript code at the end of shop.php, before the closing </body> tag
+ </body> 
 
 <script>
-// Function to add product to cart
+// Chức năng thêm sản phẩm vào giỏ hàng
 function addToCart(name, price, image) {
-    // Get the product ID from the URL or data attribute
+    // Lấy mã sản phẩm từ thuộc tính URL hoặc dữ liệu
     const productElements = document.querySelectorAll('.single-product-item');
     let productId;
     
-    // Find the product ID based on the product name
+    // Tìm mã sản phẩm dựa trên tên sản phẩm
     productElements.forEach(function(element) {
         if (element.querySelector('h3').textContent === name) {
             const linkElement = element.querySelector('a');
@@ -308,13 +291,13 @@ function addToCart(name, price, image) {
         return;
     }
     
-    // Redirect to cart.php with the product ID
+    // Chuyển hướng đến cart.php có ID sản phẩm
     window.location.href = `cart.php?action=add&id=${productId}`;
 }
 
-// Function to update cart count (call this on page load)
+// Chức năng cập nhật số lượng giỏ hàng (gọi đây khi tải trang)
 function updateCartCount() {
-    // Use AJAX to get the current cart count
+    // Sử dụng AJAX để lấy số lượng giỏ hàng hiện tại
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'get_cart_count.php', true);
     xhr.onreadystatechange = function() {
@@ -325,7 +308,7 @@ function updateCartCount() {
     xhr.send();
 }
 
-// Call updateCartCount when the page loads
+// Gọi updateCartCount khi trang tải
 window.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
 });

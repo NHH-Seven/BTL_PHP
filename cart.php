@@ -3,13 +3,13 @@
 // Include database connection
 require_once 'db_connect.php';
 
-// Check if database connection is established
+// Kiểm tra xem kết nối cơ sở dữ liệu đã được thiết lập chưa
 if (!isset($db_connected) || $db_connected !== true) {
     die("Database connection error");
 }
 
 
-// Initialize or access the shopping cart session
+// Khởi tạo hoặc truy cập phiên giỏ hàng
 session_start();
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -20,11 +20,11 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-// Handle add to cart action from shop.php
+// Xử lý hành động thêm vào giỏ hàng từ shop.php
 if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
     $product_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
     
-    // Fetch product details
+    // Tìm nạp chi tiết sản phẩm
     try {
         $stmt = $conn->prepare("SELECT * FROM products WHERE id = :id AND status = 'active'");
         $stmt->bindParam(':id', $product_id, PDO::PARAM_INT);
@@ -32,7 +32,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($product) {
-            // Check if product already in cart
+            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
             $found = false;
             foreach ($_SESSION['cart'] as $key => $item) {
                 if ($item['id'] == $product_id) {
@@ -42,7 +42,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
                 }
             }
             
-            // If product not in cart, add it
+            // Nếu sản phẩm không có trong giỏ hàng, hãy thêm sản phẩm
             if (!$found) {
                 $_SESSION['cart'][] = [
                     'id' => $product['id'],
@@ -53,7 +53,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
                 ];
             }
             
-            // Redirect to prevent form resubmission
+            // Chuyển hướng để ngăn gửi lại biểu mẫu
             header("Location: cart.php?status=added");
             exit();
         }
@@ -62,7 +62,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
     }
 }
 
-// Handle remove from cart
+// Tay cầm lấy ra khỏi giỏ hàng
 if (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['id'])) {
     $product_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
     
@@ -73,15 +73,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['id']))
         }
     }
     
-    // Reset array keys
+    // Đặt lại các phím mảng
     $_SESSION['cart'] = array_values($_SESSION['cart']);
     
-    // Redirect to prevent form resubmission
+    // Chuyển hướng để ngăn gửi lại biểu mẫu
     header("Location: cart.php?status=removed");
     exit();
 }
 
-// Handle quantity update
+// Cập nhật số lượng xử lý
 if (isset($_POST['update_cart'])) {
     foreach ($_POST['quantity'] as $id => $qty) {
         $product_id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
@@ -97,12 +97,12 @@ if (isset($_POST['update_cart'])) {
         }
     }
     
-    // Redirect to prevent form resubmission
+    // Chuyển hướng để ngăn gửi lại biểu mẫu
     header("Location: cart.php?status=updated");
     exit();
 }
 
-// Calculate cart totals
+// Tính tổng số giỏ hàng
 $total_items = 0;
 $total_price = 0;
 
@@ -393,7 +393,7 @@ h2 {
 	<div class="cart-section mt-150 mb-150">
 		<div class="container">
             <?php
-            // Display status messages
+            // Hiển thị thông báo trạng thái
             if (isset($_GET['status'])) {
                 $status = $_GET['status'];
                 if ($status == 'added') {

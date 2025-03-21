@@ -6,13 +6,13 @@ session_start();
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Check if cart exists
+// Kiểm tra xem giỏ hàng có tồn tại không
 if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
     header("Location: cart.php?error=empty");
     exit();
 }
 
-// Calculate cart totals
+// Tính tổng số giỏ hàng
 $total_items = 0;
 $total_price = 0;
 
@@ -182,7 +182,7 @@ foreach ($_SESSION['cart'] as $item) {
 						    <div class="card-header" id="headingOne">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          Billing Address
+								Địa chỉ thanh toán
 						        </button>
 						      </h5>
 						    </div>
@@ -197,7 +197,7 @@ foreach ($_SESSION['cart'] as $item) {
 										<p><input type="text" name="address" placeholder="Address" required></p>
 										<p><input type="tel" name="phone" placeholder="Phone" required></p>
 										<p><textarea name="saysomething" placeholder="Say Something" required></textarea></p>
-										<button type="submit" class="boxed-btn">Place Order</button>
+										<button type="submit" class="boxed-btn">Đặt hàng</button>
 									</form>
 						        </div>
 						      </div>
@@ -207,14 +207,14 @@ foreach ($_SESSION['cart'] as $item) {
 						    <div class="card-header" id="headingTwo">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						          Shipping Address
+								Địa chỉ giao hàng
 						        </button>
 						      </h5>
 						    </div>
 						    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
 						      <div class="card-body">
 						        <div class="shipping-address-form">
-						        	<p>Your shipping address form is here.</p>
+						        	<p>Biểu mẫu địa chỉ giao hàng của bạn ở đây.</p>
 						        </div>
 						      </div>
 						    </div>
@@ -223,14 +223,14 @@ foreach ($_SESSION['cart'] as $item) {
 						    <div class="card-header" id="headingThree">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-						          Card Details
+								Chi tiết thẻ
 						        </button>
 						      </h5>
 						    </div>
 						    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
 						      <div class="card-body">
 						        <div class="card-details">
-						        	<p>Your card details goes here.</p>
+						        	<p>Chi tiết thẻ của bạn sẽ được lưu ở đây.</p>
 						        </div>
 						      </div>
 						    </div>
@@ -245,7 +245,7 @@ foreach ($_SESSION['cart'] as $item) {
 						<table class="order-details">
 							<thead>
 								<tr>
-									<th colspan="2">Your Order Details</th>
+									<th colspan="2">Chi tiết đơn hàng của bạn</th>
 								</tr>
 							</thead>
 							<tbody class="order-details-body">
@@ -258,11 +258,11 @@ foreach ($_SESSION['cart'] as $item) {
 							</tbody>
 							<tbody class="checkout-details">
 								<tr>
-									<td>Shipping</td>
+									<td>Vận Chuyển</td>
 									<td>$15.00</td>
 								</tr>
 								<tr>
-									<td><strong>Total</strong></td>
+									<td><strong>Tổng cộng</strong></td>
 									<td><strong>$<?php echo number_format($total_price + 15, 2); ?></strong></td>
 								</tr>
 							</tbody>

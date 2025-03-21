@@ -2,14 +2,14 @@
 // Include the statistics logic file
 require_once 'admin_static.php';
 
-// Get all dashboard data
+// Nhận tất cả dữ liệu bảng điều khiển
 $dashboardData = getDashboardData($conn);
 $statistics = $dashboardData['statistics'];
 $revenue = $dashboardData['revenue'];
 $topCustomers = $dashboardData['top_customers'];
 $popularNews = $dashboardData['popular_news'];
 
-// Helper function to format currency
+// Chức năng trợ giúp để định dạng tiền tệ
 function formatCurrency($amount) {
     return number_format($amount, 0, ',', '.') . ' đ';
 }

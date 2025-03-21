@@ -2,12 +2,12 @@
 // Include database connection
 require_once 'db_connect.php';
 
-// Check if database connection is established
+// Kiểm tra xem kết nối cơ sở dữ liệu đã được thiết lập chưa
 if (!isset($db_connected) || $db_connected !== true) {
     die("Database connection error");
 }
 
-// Initialize variables
+// Khởi tạo biến
 $id = '';
 $name = '';
 $price = '';
@@ -20,14 +20,14 @@ $message = '';
 $error = '';
 $products = [];
 
-// Display success message from URL if it exists
+// Hiển thị thông báo thành công từ URL nếu nó tồn tại
 if (isset($_GET['success'])) {
     $message = urldecode($_GET['success']);
 }
 
-// Handle form submissions
+// Xử lý việc gửi biểu mẫu
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
+    // Nhận dữ liệu biểu mẫu
     $action = isset($_POST['action']) ? $_POST['action'] : '';
     
     if ($action === 'add' || $action === 'edit') {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = isset($_POST['description']) ? trim($_POST['description']) : '';
         $status = isset($_POST['status']) ? $_POST['status'] : 'active';
         
-        // Validate inputs
+        // Xác thực đầu vào
         if (empty($name)) {
             $error = "Product name is required";
         } elseif ($price <= 0) {

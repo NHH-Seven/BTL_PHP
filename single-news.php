@@ -2,12 +2,12 @@
 require_once 'db_connect.php';
 session_start();
 
-// Start session if not already started
+// Bắt đầu phiên nếu chưa bắt đầu
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if news ID is provided
+// Kiểm tra xem ID tin tức có được cung cấp hay không
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header("Location: news.php");
     exit;
@@ -15,7 +15,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $news_id = (int)$_GET['id'];
 
-// Get news article data
+// Nhận dữ liệu bài viết tin tức
 $sql = "SELECT * FROM news WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $news_id, PDO::PARAM_INT);
@@ -28,7 +28,7 @@ if ($stmt->rowCount() == 0) {
 
 $news = $stmt->fetch();
 
-// Get comments
+// Nhận nhận xét
 $comments_sql = "SELECT c.*, parent.author_name as parent_author 
                 FROM comments c 
                 LEFT JOIN comments parent ON c.parent_id = parent.id 
@@ -39,7 +39,7 @@ $comments_stmt->bindParam(1, $news_id, PDO::PARAM_INT);
 $comments_stmt->execute();
 $comments_result = $comments_stmt->fetchAll();
 
-// Get tags for this article
+// Nhận thẻ cho bài viết này
 $tags_sql = "SELECT t.name FROM tags t 
             JOIN news_tags nt ON t.id = nt.tag_id 
             WHERE nt.news_id = ?";
@@ -48,20 +48,20 @@ $tags_stmt->bindParam(1, $news_id, PDO::PARAM_INT);
 $tags_stmt->execute();
 $tags_result = $tags_stmt->fetchAll();
 
-// Get recent posts
+// Nhận bài viết gần đây
 $recent_posts_sql = "SELECT id, title FROM news ORDER BY published_date ASC LIMIT 5";
 $recent_posts_stmt = $conn->query($recent_posts_sql);
 $recent_posts_result = $recent_posts_stmt->fetchAll();
 
-// Get archive posts
+// Nhận bài viết lưu trữ
 $archive_sql = "SELECT * FROM archive_posts ORDER BY id ASC";
 $archive_stmt = $conn->query($archive_sql);
 $archive_result = $archive_stmt->fetchAll();
 
-// Handle comment submission
+// Xử lý việc gửi bình luận
 $comment_success = $comment_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
-    // Check if user is logged in
+    // Kiểm tra xem người dùng đã đăng nhập chưa
     if (!isset($_SESSION['user_id'])) {
         $comment_error = "Please log in to submit a comment";
     } else {
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         if (empty($content)) {
             $comment_error = "Comment cannot be empty";
         } else {
-            // Get user information from session
+            // Nhận thông tin người dùng từ phiên
             $author_name = $_SESSION['username'];
             $author_image = !empty($_SESSION['avatar']) ? $_SESSION['avatar'] : 'default-avatar.png';
             
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
             
             if ($insert_stmt->execute()) {
                 $comment_success = "Comment posted successfully!";
-                // Refresh page to show new comment
+                // Làm mới trang để hiển thị nhận xét mới
                 header("Location: single-news.php?id=$news_id&comment_added=1");
                 exit;
             } else {
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     }
 }
 
-// Show success message if comment was added
+// Hiển thị thông báo thành công nếu nhận xét được thêm vào
 if (isset($_GET['comment_added'])) {
     $comment_success = "Comment posted successfully!";
 }
@@ -287,7 +287,7 @@ if (isset($_GET['comment_added'])) {
                             </p>
                             <h2><?php echo htmlspecialchars($news['title']); ?></h2>
                             <?php
-                            // Split content into paragraphs and render
+                            // Chia nội dung thành các đoạn văn và hiển thị
                             $paragraphs = explode("\n", $news['content']);
                             foreach ($paragraphs as $paragraph) {
                                 if (!empty(trim($paragraph))) {
@@ -313,7 +313,7 @@ if (isset($_GET['comment_added'])) {
                                 $comments = [];
                                 $comment_replies = [];
                                 
-                                // Sort comments into parent comments and replies
+                                // Sắp xếp nhận xét thành nhận xét và câu trả lời của cha mẹ
                                 foreach ($comments_result as $comment) {
                                     if ($comment['parent_id'] === null) {
                                         $comments[] = $comment;
@@ -322,7 +322,7 @@ if (isset($_GET['comment_added'])) {
                                     }
                                 }
                                 
-                                // Display comments and their replies
+                                // Hiển thị nhận xét và câu trả lời của họ
                                 foreach ($comments as $comment):
                                 ?>
                                 <div class="single-comment-body">
@@ -338,7 +338,7 @@ if (isset($_GET['comment_added'])) {
                                         </h4>
                                         <p><?php echo htmlspecialchars($comment['content']); ?></p>
                                         
-                                        <!-- Reply form (hidden by default) -->
+                                        <!-- Biểu mẫu trả lời (ẩn theo mặc định) -->
                                         <?php if (isset($_SESSION['user_id'])): ?>
                                         <div id="reply-form-<?php echo $comment['id']; ?>" class="reply-form">
                                             <form method="post">
@@ -351,7 +351,7 @@ if (isset($_GET['comment_added'])) {
                                     </div>
                                 </div>
                                 
-                                <!-- Display replies to this comment -->
+                                <!-- Hiển thị câu trả lời cho nhận xét này -->
                                 <?php if (isset($comment_replies[$comment['id']])): ?>
                                     <?php foreach ($comment_replies[$comment['id']] as $reply): ?>
                                     <div class="single-comment-body child">
@@ -372,7 +372,7 @@ if (isset($_GET['comment_added'])) {
                             <?php endforeach; ?>
                         </div>
                         
-                        <!-- Comment form -->
+                        <!-- Biểu mẫu bình luận -->
                         <div class="comment-form">
                             <h3>Leave a comment</h3>
                             <?php if (!isset($_SESSION['user_id'])): ?>
@@ -486,7 +486,7 @@ if (isset($_GET['comment_added'])) {
     <!-- Add JavaScript for comment functionality -->
     <script>
         $(document).ready(function() {
-            // Show/hide reply form when reply link is clicked
+            // Hiển thị/ẩn biểu mẫu trả lời khi nhấp vào liên kết trả lời
             $('.reply-link').click(function() {
                 var commentId = $(this).data('comment-id');
                 $('#reply-form-' + commentId).toggle();

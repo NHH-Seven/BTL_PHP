@@ -4,7 +4,7 @@ session_start();
 // Kết nối đến CSDL bằng file db_connect.php
 require_once 'db_connect.php';
 
-// Start session if not already started
+// Bắt đầu phiên nếu chưa bắt đầu
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -102,9 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $db_connected) {
                     <!-- menu start -->
                     <nav class="main-menu">
                         <ul>
-                            <li class="current-list-item"><a href="index.php">Trang Chủ</a>
+                            <li ><a href="index.php">Trang Chủ</a>
                             </li>
-                            <li><a href="contact.php">Phản Hồi</a></li>
+                            <li class="current-list-item"><a href="contact.php">Phản Hồi</a></li>
                             </li>
                             <li><a href="news.php">Tin Tức</a>
                             </li>
@@ -149,11 +149,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $db_connected) {
     </div>
 </div>
 	<!-- end header -->
-
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Hỗ Trợ 24/7</p>
+						<h1>Liên Hệ Với Chúng Tôi</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	
 	<!-- breadcrumb-section -->
-	<?php include 'footer.php'; ?>
+	
 	<!-- end breadcrumb section -->
 
 	<!-- contact form -->
@@ -162,8 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $db_connected) {
 			<div class="row">
 				<div class="col-lg-8 mb-5 mb-lg-0">
 					<div class="form-title">
-						<h2>Have you any question?</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, ratione! Laboriosam est, assumenda. Perferendis, quo alias quaerat aliquid. Corporis ipsum minus voluptate? Dolore, esse natus!</p>
+						<h2>Bạn có thắc mắc gì không?</h2>
+						<p>Hãy điền đầy đủ thông tin để chúng tôi có thể liên hệ cho bạn sớm nhất có thể.</p>
 					</div>
 				 	<div id="form_status">
 						<?php if(!empty($message_status)): ?>
@@ -204,26 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $db_connected) {
 	<!-- end footer -->
 	
 	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-			
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php include 'footer.php'; ?>
 	<!-- end copyright -->
 	
 	<!-- jquery -->

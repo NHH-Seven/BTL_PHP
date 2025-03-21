@@ -8,7 +8,7 @@ if (!isset($db_connected) || $db_connected !== true) {
 }
 
 /**
- * Function to get count from a table
+ * Chức năng lấy số lượng từ một bảng
  */
 function getTableCount($conn, $tableName) {
     try {
@@ -23,7 +23,7 @@ function getTableCount($conn, $tableName) {
 }
 
 /**
- * Get statistics data
+ * Nhận dữ liệu thống kê
  */
 function getStatistics($conn) {
     $statistics = [];
@@ -66,7 +66,7 @@ function getStatistics($conn) {
 }
 
 /**
- * Get revenue statistics
+ * Nhận số liệu thống kê doanh thu
  */
 function getRevenueStatistics($conn) {
     $revenue = [];
@@ -119,7 +119,7 @@ function getRevenueStatistics($conn) {
             }
         }
         
-        // Calculate maximum revenue for percentage calculation
+        // Tính doanh thu tối đa để tính tỷ lệ phần trăm
         $maxRevenue = 0;
         foreach ($revenue['monthly'] as $month) {
             if ($month['revenue'] > $maxRevenue) {
@@ -147,15 +147,15 @@ function getRevenueStatistics($conn) {
 }
 
 /**
- * Get detailed statistics for dashboard
+ * Nhận số liệu thống kê chi tiết cho bảng điều khiển
  */
 function getDashboardData($conn) {
     $data = [];
     
-    // Basic statistics
+    // Thống kê cơ bản
     $data['statistics'] = getStatistics($conn);
     
-    // Revenue statistics
+    // Thống kê doanh thu
     $data['revenue'] = getRevenueStatistics($conn);
     
     // Get top customers - CHỈ từ đơn hàng hoàn thành
@@ -178,7 +178,7 @@ function getDashboardData($conn) {
         $data['top_customers'] = [];
     }
 
-    // Get popular news
+    // Nhận tin tức phổ biến
     try {
         $stmt = $conn->prepare("
             SELECT n.id, n.title, COUNT(c.id) AS comment_count
@@ -198,7 +198,7 @@ function getDashboardData($conn) {
     return $data;
 }
 
-// If this file is called directly, return JSON data
+// Nếu tệp này được gọi trực tiếp, hãy trả về dữ liệu JSON
 if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
     header('Content-Type: application/json');
     echo json_encode(getDashboardData($conn));
